@@ -1,96 +1,107 @@
 #!/bin/bash
-# Claude Code Agents Installation Script
-# This script installs global agents on a new machine
+# Claude Code Complete Configuration Installer
+# Installs agents, hooks, MCP config, and global CLAUDE.md
 
-set -e  # Exit on error
+set -e
 
-AGENTS_DIR="$HOME/.claude/agents"
-REPO_URL="${1:-}"  # Optional: pass git repo URL as argument
+REPO_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+CLAUDE_DIR="$HOME/.claude"
 
-echo "🤖 Claude Code Agents Installer"
-echo "================================"
-
-# Check if agents directory already exists
-if [ -d "$AGENTS_DIR" ]; then
-    echo "⚠️  Agents directory already exists: $AGENTS_DIR"
-    read -p "Do you want to backup and replace it? (y/N): " -n 1 -r
-    echo
-    if [[ $REPLY =~ ^[Yy]$ ]]; then
-        BACKUP_DIR="$HOME/.claude/agents.backup.$(date +%Y%m%d_%H%M%S)"
-        echo "📦 Backing up to: $BACKUP_DIR"
-        mv "$AGENTS_DIR" "$BACKUP_DIR"
-    else
-        echo "❌ Installation cancelled"
-        exit 1
-    fi
-fi
+echo "🤖 Claude Code Configuration Installer"
+echo "========================================"
+echo ""
+echo "📍 Repository: $REPO_DIR"
+echo "📁 Installing to: $CLAUDE_DIR"
+echo ""
 
 # Create .claude directory if it doesn't exist
-mkdir -p "$HOME/.claude"
+mkdir -p "$CLAUDE_DIR"
 
-# Clone from git repo if URL provided
-if [ -n "$REPO_URL" ]; then
-    echo "📥 Cloning agents from: $REPO_URL"
-    git clone "$REPO_URL" "$AGENTS_DIR"
-    echo "✅ Agents installed from git repository"
-else
-    # Create fresh agents directory with README
-    echo "📁 Creating fresh agents directory"
-    mkdir -p "$AGENTS_DIR"
+# Function to backup existing files
+backup_if_exists() {
+    local file=$1
+    if [ -f "$file" ] || [ -d "$file" ]; then
+        local backup="${file}.backup.$(date +%Y%m%d_%H%M%S)"
+        echo "📦 Backing up: $file → $backup"
+        mv "$file" "$backup"
+    fi
+}
 
-    cat > "$AGENTS_DIR/README.md" << 'EOF'
-# My Claude Code Agents
-
-This is your personal global agents directory.
-
-## Quick Start
-
-1. Add agent files here (`.md` files)
-2. Agents are automatically available in all projects
-3. Use git to sync across machines
-
-## Create Your First Agent
-
-See `SETUP.md` for instructions.
-
-## Available Agents
-
-- Add your agents here...
-
-EOF
-
-    echo "✅ Fresh agents directory created"
+# 1. Install Agents
+echo "🤖 Installing Agents"
+echo "--------------------"
+if [ -d "$CLAUDE_DIR/agents" ] && [ "$REPO_DIR" != "$CLAUDE_DIR/agents" ]; then
+    backup_if_exists "$CLAUDE_DIR/agents"
 fi
 
-# Set proper permissions
-echo "🔐 Setting permissions"
-chmod -R 755 "$AGENTS_DIR"
-find "$AGENTS_DIR" -type f -name "*.md" -exec chmod 644 {} \;
-find "$AGENTS_DIR" -type f -name "*.sh" -exec chmod 755 {} \;
+# If this repo IS the agents directory, just note it
+if [ "$REPO_DIR" == "$CLAUDE_DIR/agents" ]; then
+    echo "✅ Agents already in correct location"
+else
+    ln -sf "$REPO_DIR" "$CLAUDE_DIR/agents"
+    echo "✅ Agents symlinked to $CLAUDE_DIR/agents"
+fi
 
-# Count agents
-AGENT_COUNT=$(find "$AGENTS_DIR" -type f -name "*.md" ! -name "README.md" ! -name "SETUP.md" | wc -l | tr -d ' ')
+#  Install global CLAUDE.md
+echo ""
+echo "📝 Installing Global CLAUDE.md"
+echo "-------------------------------"
+if [ -f "$CLAUDE_DIR/CLAUDE.md" ]; then
+    backup_if_exists "$CLAUDE_DIR/CLAUDE.md"
+fi
+cp "$REPO_DIR/config/CLAUDE.md" "$CLAUDE_DIR/CLAUDE.md"
+echo "✅ CLAUDE.md installed"
 
+# 3. Install MCP Configuration
+echo ""
+echo "🔌 Installing MCP Configuration"
+echo "--------------------------------"
+if [ -f "$CLAUDE_DIR/settings.json" ]; then
+    echo "⚠️  Existing settings.json found"
+    echo "   MCP config is in: $REPO_DIR/mcp/servers.json"
+    echo "   Merge manually or backup and replace"
+else
+    cp "$REPO_DIR/mcp/servers.json" "$CLAUDE_DIR/settings.json"
+    echo "✅ MCP configuration installed"
+fi
+
+# 4. Set permissions for hook scripts
+echo ""
+echo "🔐 Setting Hook Permissions"
+echo "----------------------------"
+find "$REPO_DIR/hooks" -type f -name "*.sh" -exec chmod +x {} \;
+echo "✅ Hook scripts are executable"
+
+# 5. Summary
 echo ""
 echo "✨ Installation Complete!"
+echo "========================="
 echo ""
-echo "📍 Location: $AGENTS_DIR"
-echo "📊 Agents installed: $AGENT_COUNT"
+echo "📊 What was installed:"
+echo "  ✅ Agents: $CLAUDE_DIR/agents"
+echo "  ✅ Global CLAUDE.md: $CLAUDE_DIR/CLAUDE.md"
+echo "  ✅ MCP Config: $CLAUDE_DIR/settings.json"
+echo "  ✅ Hooks: Available in $REPO_DIR/hooks"
 echo ""
-echo "Next steps:"
-echo "  1. View agents: ls $AGENTS_DIR"
-echo "  2. Read setup guide: cat $AGENTS_DIR/SETUP.md"
-echo "  3. Create agent: nano $AGENTS_DIR/my-agent.md"
-if [ -z "$REPO_URL" ]; then
-    echo "  4. Initialize git: cd $AGENTS_DIR && git init"
-fi
+echo "📚 Available Agents:"
+find "$REPO_DIR/agents" -type f -name "*.md" -exec basename {} .md \; | sed 's/^/  - /'
 echo ""
-
-# List available agents
-if [ $AGENT_COUNT -gt 0 ]; then
-    echo "📋 Available agents:"
-    find "$AGENTS_DIR" -type f -name "*.md" ! -name "README.md" ! -name "SETUP.md" -exec basename {} .md \; | sed 's/^/  - /'
-fi
-
+echo "🔧 Available Hooks:"
+find "$REPO_DIR/hooks" -type d -mindepth 1 -maxdepth 1 -exec basename {} \; | sed 's/^/  - /'
+echo ""
+echo "📖 Next Steps:"
+echo "  1. Review global CLAUDE.md: cat $CLAUDE_DIR/CLAUDE.md"
+echo "  2. Configure MCP servers: edit $CLAUDE_DIR/settings.json"
+echo "  3. Set environment variables (see config/CLAUDE.md)"
+echo "  4. Use agents in any project:"
+echo "     \"Use laravel-expert to review my code\""
+echo "  5. Copy hooks to projects as needed:"
+echo "     cp -r $REPO_DIR/hooks/laravel/* myproject/.claude/hooks/"
+echo ""
+echo "📚 Documentation:"
+echo "  - README: $REPO_DIR/README.md"
+echo "  - Agents: $REPO_DIR/agents/README.md"
+echo "  - Hooks: $REPO_DIR/hooks/README.md"
+echo "  - MCP: $REPO_DIR/mcp/README.md"
 echo ""
 echo "🎉 Happy coding with Claude!"
