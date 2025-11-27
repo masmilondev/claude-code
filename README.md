@@ -1,484 +1,249 @@
-# Claude Code Complete Configuration
+# Claude Code Agent System
 
-A comprehensive, organized repository containing all your Claude Code configurations: agents, hooks, MCP servers, and global settings. Clone once, configure everywhere!
+A portable, reusable agent system for Claude Code that provides comprehensive project management from ideation to Jira reporting.
 
-## 🎯 What's Included
+## Quick Start
 
-This repository contains everything you need for Claude Code:
-
-```
-claude-code/
-├── agents/              # AI specialist agents
-│   ├── code-reviewer.md
-│   ├── laravel-expert.md
-│   └── nextjs-architect.md
-├── hooks/               # Automation scripts per tech stack
-│   ├── laravel/
-│   ├── nextjs/
-│   ├── flutter/
-│   ├── python/
-│   └── go/
-├── mcp/                 # Model Context Protocol servers
-│   └── servers.json
-├── config/              # Global Claude configuration
-│   └── CLAUDE.md
-├── docs/                # Documentation
-│   ├── SETUP.md
-│   └── GIT-SETUP.md
-├── install.sh           # Master installation script
-├── sync.sh              # Sync across machines
-├── new-agent.sh         # Create new agents
-└── README.md            # This file
-```
-
-## 🚀 Quick Start
-
-### First Time Setup
+### On a New Computer
 
 ```bash
-# 1. Clone this repository to ~/.claude/agents
-git clone git@github.com-masmilondev:masmilondev/claude-code.git ~/.claude/agents
+# Clone the repo
+git clone https://github.com/YOUR_USERNAME/claude-agents.git ~/.claude/agents
 
-# 2. Run installation script
+# Install to a project
 cd ~/.claude/agents
-./install.sh
-
-# 3. Set environment variables
-echo 'export GITHUB_TOKEN="your_token"' >> ~/.zshrc
-source ~/.zshrc
-
-# ✅ Done! Everything is configured
+./install.sh /path/to/your/project
 ```
 
-### On Additional Machines
+### In Your Project
 
 ```bash
-# Clone and install (same commands)
-git clone git@github.com-masmilondev:masmilondev/claude-code.git ~/.claude/agents
-cd ~/.claude/agents
-./install.sh
+# Create an SOP for your task
+/sop
+
+Fix the login bug where users can't reset passwords...
+
+# Run the full workflow automatically
+/continue-till-complete
 ```
-
-## 📦 What Gets Installed
-
-The `install.sh` script sets up:
-
-1. **Agents** → `~/.claude/agents/` (symlink to repo)
-2. **Global CLAUDE.md** → `~/.claude/CLAUDE.md`
-3. **MCP Configuration** → `~/.claude/settings.json`
-4. **Hook Scripts** → Executable and ready to copy to projects
-
-## 🤖 Using Agents
-
-Agents are AI specialists available in **ALL your projects** automatically.
-
-### Available Agents
-
-- **code-reviewer** - General code review, SOLID principles, best practices
-- **laravel-expert** - Laravel/Eloquent optimization, security, architecture
-- **nextjs-architect** - Next.js/React patterns, performance, TypeScript
-
-### Usage
-
-In any project, simply ask:
-
-```
-"Use laravel-expert to review app/Http/Controllers/UserController.php"
-```
-
-```
-"Invoke code-reviewer for the entire codebase"
-```
-
-```
-"Use nextjs-architect to optimize components/ProductList.tsx"
-```
-
-### Create New Agents
-
-```bash
-cd ~/.claude/agents
-./new-agent.sh
-
-# Follow prompts to create:
-# - python-expert
-# - go-expert
-# - flutter-expert
-```
-
-[Full agent documentation →](agents/README.md)
-
-## 🪝 Using Hooks
-
-Hooks automate tasks before/after commands (tests, linting, formatting).
-
-### Available Hooks by Tech Stack
-
-- **Laravel**: Pre/post build (composer, tests, PHPStan, Pint)
-- **Next.js**: Pre/post build (dependencies, ESLint, tests, type check)
-- **Flutter**: Pre/post build (pub get, analyze, tests, coverage)
-- **Python**: Pre/post build (venv, pytest, black, flake8)
-- **Go**: Pre/post build (mod download, tests, vet, golangci-lint)
-
-### Install Hooks in Project
-
-```bash
-# For a Laravel project
-cp -r ~/.claude/agents/hooks/laravel/* ~/my-laravel-project/.claude/hooks/
-
-# For a Next.js project
-cp -r ~/.claude/agents/hooks/nextjs/* ~/my-nextjs-project/.claude/hooks/
-
-# Make them executable
-chmod +x ~/my-laravel-project/.claude/hooks/*.sh
-```
-
-[Full hooks documentation →](hooks/README.md)
-
-## 🔌 MCP Servers
-
-Model Context Protocol servers extend Claude Code with external integrations.
-
-### Configured Servers
-
-- **GitHub** - Repository integration (PRs, issues, commits)
-- **Filesystem** - Advanced file operations
-- **PostgreSQL** - Database queries and management
-- **Docker** - Container management
-
-### Setup
-
-1. **Set environment variables**:
-   ```bash
-   export GITHUB_TOKEN="your_personal_access_token"
-   export DATABASE_URL="postgresql://localhost/mydb"
-   ```
-
-2. **Configure servers**:
-   ```bash
-   edit ~/.claude/settings.json
-   # Or copy template:
-   cp ~/.claude/agents/mcp/servers.json ~/.claude/settings.json
-   ```
-
-3. **Enable/disable** servers by setting `"enabled": true/false`
-
-[Full MCP documentation →](mcp/README.md)
-
-## 📝 Global CLAUDE.md
-
-The global CLAUDE.md file contains instructions that apply to ALL your projects.
-
-**Location**: `~/.claude/CLAUDE.md`
-
-**Includes**:
-- Core development principles (SOLID, DRY, YAGNI)
-- Code organization rules (file size limits, separation)
-- Task planning requirements
-- Agent references
-- Security and performance guidelines
-
-**Edit**:
-```bash
-code ~/.claude/CLAUDE.md
-```
-
-## 🔄 Syncing Across Machines
-
-### Daily Workflow
-
-**Morning** (pull updates from other machines):
-```bash
-cd ~/.claude/agents
-git pull
-```
-
-**Evening** (push your changes):
-```bash
-cd ~/.claude/agents
-./sync.sh
-# Or manually:
-git add .
-git commit -m "Updated agents with new patterns"
-git push
-```
-
-### How Sync Works
-
-```
-Laptop                    GitHub                    Desktop
-  ↓                         ↑                         ↑
-Edit agents          →    Push            →        Pull
-                                                     ↓
-                                              Get updates
-```
-
-Make changes on any machine → Sync → All machines get updates!
-
-## 📂 Repository Structure Explained
-
-```
-~/.claude/agents/         # This git repository
-├── agents/              # AI specialist agents
-│   ├── README.md
-│   ├── code-reviewer.md
-│   ├── laravel-expert.md
-│   └── nextjs-architect.md
-│
-├── hooks/               # Automation hooks by tech stack
-│   ├── README.md
-│   ├── laravel/        # Laravel-specific hooks
-│   │   ├── pre-build.sh
-│   │   └── post-build.sh
-│   ├── nextjs/         # Next.js-specific hooks
-│   ├── flutter/        # Flutter-specific hooks
-│   ├── python/         # Python-specific hooks
-│   └── go/             # Go-specific hooks
-│
-├── mcp/                 # MCP server configurations
-│   ├── README.md
-│   └── servers.json
-│
-├── config/              # Global configurations
-│   └── CLAUDE.md       # Global Claude instructions
-│
-├── docs/                # Documentation
-│   ├── SETUP.md
-│   └── GIT-SETUP.md
-│
-├── install.sh           # Master installation script
-├── sync.sh              # Sync across machines
-├── new-agent.sh         # Create new agents
-├── .gitignore
-└── README.md            # This file
-```
-
-## 🎓 Usage Examples
-
-### Example 1: Code Review
-
-```bash
-cd ~/projects/my-laravel-app
-
-# Ask Claude:
-"Use laravel-expert to review app/Models/User.php"
-
-# Agent checks for:
-# - N+1 queries
-# - Security issues
-# - Performance problems
-# - Best practices
-```
-
-### Example 2: Automated Testing
-
-```bash
-cd ~/projects/my-nextjs-app
-
-# Copy Next.js hooks
-cp -r ~/.claude/agents/hooks/nextjs/* .claude/hooks/
-
-# Now every build automatically:
-# - Runs ESLint
-# - Runs tests
-# - Type checks
-# - Analyzes bundle
-```
-
-### Example 3: Multi-Machine Development
-
-```bash
-# Work laptop
-cd ~/.claude/agents
-./new-agent.sh  # Create python-expert
-./sync.sh       # Push to GitHub
-
-# Home desktop (later)
-cd ~/.claude/agents
-git pull        # Get python-expert automatically
-
-# Use in any project
-"Use python-expert to optimize this async code"
-```
-
-## 🛠️ Management Commands
-
-### Agents
-
-```bash
-# List all agents
-ls ~/.claude/agents/agents/*.md
-
-# Create new agent
-~/.claude/agents/new-agent.sh
-
-# Edit agent
-code ~/.claude/agents/agents/laravel-expert.md
-```
-
-### Hooks
-
-```bash
-# View available hooks
-ls ~/.claude/agents/hooks/
-
-# Copy to project
-cp -r ~/.claude/agents/hooks/laravel/* myproject/.claude/hooks/
-```
-
-### Sync
-
-```bash
-# Pull latest
-cd ~/.claude/agents && git pull
-
-# Push changes
-cd ~/.claude/agents && ./sync.sh
-
-# View status
-cd ~/.claude/agents && git status
-```
-
-## 🔧 Customization
-
-### Add Your Own Agent
-
-```bash
-cd ~/.claude/agents
-./new-agent.sh
-
-# Edit the generated file
-code agents/my-agent.md
-
-# Commit and sync
-git add agents/my-agent.md
-git commit -m "Added my-agent"
-git push
-```
-
-### Customize Hooks
-
-```bash
-# Copy and modify
-cp hooks/laravel/pre-build.sh hooks/laravel/my-pre-build.sh
-
-# Edit to your needs
-code hooks/laravel/my-pre-build.sh
-
-# Commit
-git add hooks/laravel/my-pre-build.sh
-git commit -m "Added custom Laravel pre-build hook"
-git push
-```
-
-### Update MCP Configuration
-
-```bash
-# Edit MCP servers
-code ~/.claude/agents/mcp/servers.json
-
-# Apply to system
-cp mcp/servers.json ~/.claude/settings.json
-
-# Commit
-git add mcp/servers.json
-git commit -m "Updated MCP configuration"
-git push
-```
-
-## 📚 Full Documentation
-
-- **[Agents Guide](agents/README.md)** - How to create and use agents
-- **[Hooks Guide](hooks/README.md)** - Automation with hooks
-- **[MCP Guide](mcp/README.md)** - External integrations
-- **[Setup Guide](docs/SETUP.md)** - Detailed installation
-- **[Git Sync Guide](docs/GIT-SETUP.md)** - Multi-machine workflow
-
-## 🆘 Troubleshooting
-
-### "Agent not found"
-
-```bash
-# Ensure repository is installed
-ls ~/.claude/agents
-
-# If missing, clone and install
-git clone git@github.com-masmilondev:masmilondev/claude-code.git ~/.claude/agents
-cd ~/.claude/agents && ./install.sh
-```
-
-### "Hook not executing"
-
-```bash
-# Check permissions
-ls -l myproject/.claude/hooks/
-
-# Make executable
-chmod +x myproject/.claude/hooks/*.sh
-```
-
-### "MCP server not responding"
-
-```bash
-# Check configuration
-cat ~/.claude/settings.json
-
-# Verify environment variables
-echo $GITHUB_TOKEN
-```
-
-### Sync Conflicts
-
-```bash
-cd ~/.claude/agents
-git status
-
-# Keep your version
-git checkout --ours file.md
-git add file.md && git commit
-
-# Keep remote version
-git checkout --theirs file.md
-git add file.md && git commit
-```
-
-## 🤝 Contributing
-
-Improved an agent or hook? Share it!
-
-```bash
-cd ~/.claude/agents
-git add .
-git commit -m "Improved laravel-expert with queue checks"
-git push
-```
-
-## 📖 Tech Stack
-
-This configuration is optimized for:
-
-- **Backend**: Laravel (PHP), Python (FastAPI), Go
-- **Frontend**: Next.js (React, TypeScript)
-- **Mobile**: Flutter (Dart)
-- **Databases**: MySQL, PostgreSQL, MongoDB
-
-## 🎉 What's Next?
-
-1. ✅ **Clone and install** (you're here!)
-2. 📖 **Read** `~/.claude/CLAUDE.md` to see global settings
-3. 🤖 **Use an agent** in your project
-4. 🪝 **Add hooks** to a project
-5. ✨ **Create custom agents** for your needs
-6. 🔄 **Sync across machines**
-
-## 🔗 Links
-
-- **Repository**: git@github.com-masmilondev:masmilondev/claude-code.git
-- **Issues**: Report problems or suggest improvements
-- **Claude Code Docs**: https://docs.anthropic.com/claude-code
 
 ---
 
-**Happy coding with Claude!** 🚀
+## Available Commands
 
-*Last updated: 2025-11-23*
+| Command | Description |
+|---------|-------------|
+| `/sop` | Create new SOP/SOW document |
+| `/plan` | Create implementation plan |
+| `/continue-sop` | Continue existing SOP (manual mode) |
+| `/continue-plan` | Continue existing plan (manual mode) |
+| `/continue-till-complete` | **AUTONOMOUS** - Run full workflow |
+| `/generate-report` | Generate Jira-ready report |
+
+---
+
+## Workflow
+
+```
+/sop → Ideation → Planning → PLAN.md → Development → Testing → REPORT.md
+         auto       ⏸️pause      auto         auto        auto
+```
+
+The `/continue-till-complete` command runs everything automatically, **only pausing once** for plan approval.
+
+---
+
+## Directory Structure
+
+```
+~/.claude/agents/           # Global repo (this folder)
+├── commands/               # Slash commands
+│   ├── sop.md             # /sop
+│   ├── plan.md            # /plan
+│   ├── continue-sop.md    # /continue-sop
+│   ├── continue-plan.md   # /continue-plan
+│   ├── continue-till-complete.md  # /continue-till-complete
+│   └── generate-report.md # /generate-report
+├── templates/              # Document templates
+│   ├── SOP_TEMPLATE.md
+│   ├── PLAN_TEMPLATE.md
+│   └── REPORT_TEMPLATE.md
+├── hooks/                  # Automation scripts
+│   ├── sop-check.sh
+│   ├── sop-update.sh
+│   ├── plan-check.sh
+│   ├── plan-update.sh
+│   └── db-schema.sh
+├── agents/                 # Documentation
+│   └── README.md
+├── install.sh             # Install to projects
+├── sync.sh                # Sync between projects
+└── README.md              # This file
+```
+
+---
+
+## Scripts
+
+### install.sh
+
+Install the agent system to any project:
+
+```bash
+# Install to current directory
+./install.sh
+
+# Install to specific project
+./install.sh /path/to/project
+```
+
+### sync.sh
+
+Sync changes between projects and global repo:
+
+```bash
+# Pull improvements from a project to global
+./sync.sh pull /path/to/project
+
+# Push global updates to a project
+./sync.sh push /path/to/project
+
+# Show current status
+./sync.sh status
+
+# Commit and push to GitHub
+./sync.sh git-push
+
+# Pull latest from GitHub (on new computer)
+./sync.sh git-pull
+```
+
+---
+
+## SOP Workflow Phases
+
+| Phase | Tasks | Mode |
+|-------|-------|------|
+| 1. Ideation | Understand problem, gather context | Auto |
+| 2. Planning | Research, create PLAN.md | **Pause for approval** |
+| 3. Development | Execute plan tasks | Auto |
+| 4. Testing | Run tests, verify | Auto |
+| 5. Review | Generate Jira report | Auto |
+
+---
+
+## Project Output Structure
+
+After using the system, your project will have:
+
+```
+your-project/
+├── .claude/                # Agent commands (installed)
+├── docs/
+│   ├── SOP/
+│   │   └── {topic}/
+│   │       └── {subtopic}/
+│   │           ├── SOP.md      # Main SOP document
+│   │           └── REPORT.md   # Jira-ready report
+│   └── {topic}/
+│       └── PLAN.md             # Implementation plan
+```
+
+---
+
+## Multi-Computer Setup
+
+### Computer 1 (Primary)
+
+```bash
+# After making improvements to agents
+cd ~/.claude/agents
+./sync.sh pull /path/to/project-with-improvements
+./sync.sh git-push
+```
+
+### Computer 2 (Secondary)
+
+```bash
+# Get latest updates
+cd ~/.claude/agents
+./sync.sh git-pull
+
+# Update your projects
+./sync.sh push /path/to/project1
+./sync.sh push /path/to/project2
+```
+
+---
+
+## Example Usage
+
+### Bug Fix
+
+```
+/sop
+
+Fix order bulk update - currently calling individual PATCH calls per item.
+Need single API call.
+Error: "Order record not found"
+URL: http://localhost:3003/orders/123
+```
+
+Then:
+
+```
+/continue-till-complete
+```
+
+### New Feature
+
+```
+/sop
+
+Add user profile image upload feature.
+- S3 storage
+- Image processing
+- Frontend component
+```
+
+Then:
+
+```
+/continue-till-complete
+```
+
+---
+
+## Customization
+
+### Adding New Commands
+
+Create a new `.md` file in `commands/`:
+
+```bash
+# Example: Create a /review command
+touch commands/review.md
+```
+
+### Modifying Templates
+
+Edit files in `templates/` to customize:
+- SOP structure
+- Plan format
+- Report output
+
+### Adding Hooks
+
+Add shell scripts to `hooks/` for automation:
+
+```bash
+# Example: Custom pre-build hook
+touch hooks/my-hook.sh
+chmod +x hooks/my-hook.sh
+```
+
+---
+
+## License
+
+MIT - Use freely in your projects.
