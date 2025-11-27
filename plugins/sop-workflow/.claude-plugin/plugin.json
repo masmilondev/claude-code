@@ -1,0 +1,19 @@
+{
+  "name": "sop-workflow",
+  "version": "1.0.0",
+  "description": "SOP/SOW Workflow System - Complete project management from ideation to Jira reporting with autonomous execution",
+  "author": {
+    "name": "masmilon"
+  },
+  "license": "MIT",
+  "keywords": [
+    "sop",
+    "sow",
+    "workflow",
+    "planning",
+    "jira",
+    "autonomous",
+    "project-management",
+    "task-tracking"
+  ]
+}

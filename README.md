@@ -1,126 +1,64 @@
-# Claude Code Agent System
+# Claude Code - Private Plugin Marketplace
 
-A portable, reusable agent system for Claude Code that provides comprehensive project management from ideation to Jira reporting.
+A private plugin marketplace for Claude Code with custom agents and workflows.
 
-## Quick Start
+## Installation
 
-### On a New Computer
+### Add as Marketplace
 
-```bash
-# Clone the repo
-git clone https://github.com/YOUR_USERNAME/claude-agents.git ~/.claude/agents
-
-# Install to a project
-cd ~/.claude/agents
-./install.sh /path/to/your/project
-```
-
-### In Your Project
-
-```bash
-# Create an SOP for your task
-/sop
-
-Fix the login bug where users can't reset passwords...
-
-# Run the full workflow automatically
-/continue-till-complete
-```
+1. Push this repo to your GitHub (private or public)
+2. In Claude Code, type `/plugins`
+3. Select "Add marketplace"
+4. Enter your GitHub repo: `YOUR_USERNAME/claude-code`
+5. Install the plugins you want
 
 ---
 
-## Available Commands
+## Available Plugins
+
+| Plugin | Description |
+|--------|-------------|
+| **sop-workflow** | SOP/SOW Workflow System - Complete project management from ideation to Jira reporting with autonomous execution |
+
+---
+
+## Plugin: sop-workflow
+
+### Commands
+
+After installing, use commands with the `sop-workflow:` prefix:
 
 | Command | Description |
 |---------|-------------|
-| `/sop` | Create new SOP/SOW document |
-| `/plan` | Create implementation plan |
-| `/continue-sop` | Continue existing SOP (manual mode) |
-| `/continue-plan` | Continue existing plan (manual mode) |
-| `/continue-till-complete` | **AUTONOMOUS** - Run full workflow |
-| `/generate-report` | Generate Jira-ready report |
+| `/sop-workflow:sop` | Create new SOP/SOW |
+| `/sop-workflow:plan` | Create implementation plan |
+| `/sop-workflow:continue-sop` | Continue existing SOP |
+| `/sop-workflow:continue-plan` | Continue existing plan |
+| `/sop-workflow:continue-till-complete` | **AUTONOMOUS** - Run full workflow |
+| `/sop-workflow:generate-report` | Generate Jira report |
 
----
-
-## Workflow
+### Workflow
 
 ```
-/sop → Ideation → Planning → PLAN.md → Development → Testing → REPORT.md
-         auto       ⏸️pause      auto         auto        auto
+/sop-workflow:sop → Ideation → Planning → Development → Testing → Jira Report
+                      auto       ⏸️pause      auto         auto        auto
 ```
 
-The `/continue-till-complete` command runs everything automatically, **only pausing once** for plan approval.
+The `/sop-workflow:continue-till-complete` command runs everything automatically, **only pausing once** for plan approval.
 
----
-
-## Directory Structure
+### Quick Start
 
 ```
-~/.claude/agents/           # Global repo (this folder)
-├── commands/               # Slash commands
-│   ├── sop.md             # /sop
-│   ├── plan.md            # /plan
-│   ├── continue-sop.md    # /continue-sop
-│   ├── continue-plan.md   # /continue-plan
-│   ├── continue-till-complete.md  # /continue-till-complete
-│   └── generate-report.md # /generate-report
-├── templates/              # Document templates
-│   ├── SOP_TEMPLATE.md
-│   ├── PLAN_TEMPLATE.md
-│   └── REPORT_TEMPLATE.md
-├── hooks/                  # Automation scripts
-│   ├── sop-check.sh
-│   ├── sop-update.sh
-│   ├── plan-check.sh
-│   ├── plan-update.sh
-│   └── db-schema.sh
-├── agents/                 # Documentation
-│   └── README.md
-├── install.sh             # Install to projects
-├── sync.sh                # Sync between projects
-└── README.md              # This file
+# Create SOP for your task
+/sop-workflow:sop
+
+Fix the login bug where users can't reset passwords...
+
+# Run autonomous workflow (only pauses for plan approval)
+/sop-workflow:continue-till-complete
 ```
 
----
-
-## Scripts
-
-### install.sh
-
-Install the agent system to any project:
-
-```bash
-# Install to current directory
-./install.sh
-
-# Install to specific project
-./install.sh /path/to/project
-```
-
-### sync.sh
-
-Sync changes between projects and global repo:
-
-```bash
-# Pull improvements from a project to global
-./sync.sh pull /path/to/project
-
-# Push global updates to a project
-./sync.sh push /path/to/project
-
-# Show current status
-./sync.sh status
-
-# Commit and push to GitHub
-./sync.sh git-push
-
-# Pull latest from GitHub (on new computer)
-./sync.sh git-pull
-```
-
----
-
-## SOP Workflow Phases
+### SOP Workflow Phases
 
 | Phase | Tasks | Mode |
 |-------|-------|------|
@@ -130,15 +68,12 @@ Sync changes between projects and global repo:
 | 4. Testing | Run tests, verify | Auto |
 | 5. Review | Generate Jira report | Auto |
 
----
-
-## Project Output Structure
+### Project Output Structure
 
 After using the system, your project will have:
 
 ```
 your-project/
-├── .claude/                # Agent commands (installed)
 ├── docs/
 │   ├── SOP/
 │   │   └── {topic}/
@@ -151,95 +86,78 @@ your-project/
 
 ---
 
-## Multi-Computer Setup
+## Adding New Plugins
 
-### Computer 1 (Primary)
+Create a new folder in `plugins/` with this structure:
 
-```bash
-# After making improvements to agents
-cd ~/.claude/agents
-./sync.sh pull /path/to/project-with-improvements
-./sync.sh git-push
+```
+plugins/
+└── your-plugin/
+    ├── .claude-plugin/
+    │   └── plugin.json
+    ├── commands/
+    │   └── your-command.md
+    ├── agents/           # Optional
+    ├── hooks/            # Optional
+    └── templates/        # Optional
 ```
 
-### Computer 2 (Secondary)
+Example `plugin.json`:
 
-```bash
-# Get latest updates
-cd ~/.claude/agents
-./sync.sh git-pull
+```json
+{
+  "name": "your-plugin",
+  "version": "1.0.0",
+  "description": "Description of your plugin",
+  "author": {
+    "name": "your-name"
+  },
+  "license": "MIT",
+  "keywords": ["keyword1", "keyword2"]
+}
+```
 
-# Update your projects
-./sync.sh push /path/to/project1
-./sync.sh push /path/to/project2
+Then update `.claude-plugin/marketplace.json` to include your plugin.
+
+---
+
+## Marketplace Structure
+
+```
+claude-code/                    # Root (this repo)
+├── .claude-plugin/
+│   └── marketplace.json       # Lists all plugins
+├── plugins/
+│   └── sop-workflow/          # Plugin folder
+│       ├── .claude-plugin/
+│       │   └── plugin.json    # Plugin metadata
+│       ├── commands/          # Slash commands
+│       ├── templates/         # Document templates
+│       ├── hooks/             # Shell scripts
+│       └── agents/            # Agent docs
+├── install.sh                 # Legacy install script
+├── sync.sh                    # Legacy sync script
+└── README.md                  # This file
 ```
 
 ---
 
-## Example Usage
+## Syncing Updates
 
-### Bug Fix
-
-```
-/sop
-
-Fix order bulk update - currently calling individual PATCH calls per item.
-Need single API call.
-Error: "Order record not found"
-URL: http://localhost:3003/orders/123
-```
-
-Then:
-
-```
-/continue-till-complete
-```
-
-### New Feature
-
-```
-/sop
-
-Add user profile image upload feature.
-- S3 storage
-- Image processing
-- Frontend component
-```
-
-Then:
-
-```
-/continue-till-complete
-```
-
----
-
-## Customization
-
-### Adding New Commands
-
-Create a new `.md` file in `commands/`:
+After making changes to plugins:
 
 ```bash
-# Example: Create a /review command
-touch commands/review.md
+cd ~/.claude/claude-code
+git add -A
+git commit -m "Update plugins"
+git push origin main
 ```
 
-### Modifying Templates
+On other computers or to get updates:
 
-Edit files in `templates/` to customize:
-- SOP structure
-- Plan format
-- Report output
-
-### Adding Hooks
-
-Add shell scripts to `hooks/` for automation:
-
-```bash
-# Example: Custom pre-build hook
-touch hooks/my-hook.sh
-chmod +x hooks/my-hook.sh
+```
+# In Claude Code
+/plugins → Select your marketplace → Update marketplace
 ```
 
 ---
