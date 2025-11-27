@@ -6,19 +6,19 @@
   },
   "metadata": {
     "description": "Private plugin marketplace for custom Claude Code agents and workflows",
-    "version": "1.0.0"
+    "version": "1.1.0"
   },
   "plugins": [
     {
       "name": "sop-workflow",
       "source": "./plugins/sop-workflow",
-      "description": "SOP/SOW Workflow System - Complete project management from ideation to Jira reporting with autonomous execution",
-      "version": "1.0.0",
+      "description": "Complete SOP/SOW Workflow System - Project management with autonomous execution, code review, testing, deployment, hotfixes, refactoring, and Jira reporting",
+      "version": "1.1.0",
       "author": {
         "name": "masmilon"
       },
       "category": "workflow",
-      "keywords": ["sop", "sow", "workflow", "planning", "jira", "autonomous", "project-management"]
+      "keywords": ["sop", "sow", "workflow", "planning", "jira", "autonomous", "project-management", "code-review", "testing", "deployment", "hotfix", "refactoring"]
     }
   ]
 }

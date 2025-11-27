@@ -1,7 +1,7 @@
 {
   "name": "sop-workflow",
-  "version": "1.0.0",
-  "description": "SOP/SOW Workflow System - Complete project management from ideation to Jira reporting with autonomous execution",
+  "version": "1.1.0",
+  "description": "Complete SOP/SOW Workflow System - Project management with autonomous execution, code review, testing, deployment, hotfixes, refactoring, and Jira reporting",
   "author": {
     "name": "masmilon"
   },
@@ -14,6 +14,27 @@
     "jira",
     "autonomous",
     "project-management",
-    "task-tracking"
-  ]
+    "task-tracking",
+    "code-review",
+    "testing",
+    "deployment",
+    "hotfix",
+    "refactoring"
+  ],
+  "commands": {
+    "sop": "Create new SOP for feature, bug fix, or task",
+    "continue-sop": "Continue working on existing SOP step-by-step",
+    "continue-till-complete": "Autonomous execution until completion",
+    "add-issue": "Add issues discovered during testing",
+    "review": "Perform code review on completed work",
+    "test": "Run and verify tests",
+    "deploy": "Execute deployment workflow",
+    "hotfix": "Handle urgent production fixes",
+    "refactor": "Code improvement without behavior changes",
+    "status": "View all active work and progress",
+    "close": "Close and archive completed SOP",
+    "generate-report": "Generate Jira-ready report",
+    "plan": "Create implementation plan",
+    "continue-plan": "Continue existing plan"
+  }
 }
