@@ -1,10 +1,10 @@
 ---
-name: sop-workflow-plan
+name: sop-plan
 description: Create implementation plan for a task
-usage: /sop-workflow-plan [task description]
+usage: /sop-plan [task description]
 examples:
-  - /sop-workflow-plan implement user authentication
-  - /sop-workflow-plan refactor payment module
+  - /sop-plan implement user authentication
+  - /sop-plan refactor payment module
 ---
 
 # Planning Agent Command

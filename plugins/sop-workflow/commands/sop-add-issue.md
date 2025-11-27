@@ -1,10 +1,10 @@
 ---
-name: sop-workflow-add-issue
+name: sop-add-issue
 description: Add issues discovered during manual testing to existing SOP
-usage: /sop-workflow-add-issue [issue description]
+usage: /sop-add-issue [issue description]
 examples:
-  - /sop-workflow-add-issue button not working on mobile
-  - /sop-workflow-add-issue validation error for empty fields
+  - /sop-add-issue button not working on mobile
+  - /sop-add-issue validation error for empty fields
 ---
 
 # Add Issue to SOP Command

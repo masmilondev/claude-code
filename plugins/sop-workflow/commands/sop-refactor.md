@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-refactor
+name: sop-refactor
 description: Code improvement without behavior changes
-usage: /sop-workflow-refactor [extract|simplify|organize|types|dry|performance]
+usage: /sop-refactor [extract|simplify|organize|types|dry|performance]
 examples:
-  - /sop-workflow-refactor extract
-  - /sop-workflow-refactor simplify src/utils/
-  - /sop-workflow-refactor dry
+  - /sop-refactor extract
+  - /sop-refactor simplify src/utils/
+  - /sop-refactor dry
 ---
 
 # Refactor Command

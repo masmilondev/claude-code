@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-review
+name: sop-review
 description: Perform code review on completed work with checklist
-usage: /sop-workflow-review [quick|standard|deep]
+usage: /sop-review [quick|standard|deep]
 examples:
-  - /sop-workflow-review
-  - /sop-workflow-review quick
-  - /sop-workflow-review deep
+  - /sop-review
+  - /sop-review quick
+  - /sop-review deep
 ---
 
 # Code Review Command

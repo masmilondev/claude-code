@@ -1,10 +1,10 @@
 ---
-name: sop-workflow-continue-till-complete
+name: sop-continue-till-complete
 description: Autonomous execution until completion (only pauses for plan approval)
-usage: /sop-workflow-continue-till-complete [path/to/SOP.md]
+usage: /sop-continue-till-complete [path/to/SOP.md]
 examples:
-  - /sop-workflow-continue-till-complete
-  - /sop-workflow-continue-till-complete docs/SOP/feature/auth/SOP.md
+  - /sop-continue-till-complete
+  - /sop-continue-till-complete docs/SOP/feature/auth/SOP.md
 ---
 
 # Continue Till Complete - Autonomous Execution Agent

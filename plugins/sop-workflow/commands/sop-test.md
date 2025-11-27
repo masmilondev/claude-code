@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-test
+name: sop-test
 description: Run and verify tests with reporting
-usage: /sop-workflow-test [quick|standard|full|watch]
+usage: /sop-test [quick|standard|full|watch]
 examples:
-  - /sop-workflow-test
-  - /sop-workflow-test quick
-  - /sop-workflow-test full
+  - /sop-test
+  - /sop-test quick
+  - /sop-test full
 ---
 
 # Test Command

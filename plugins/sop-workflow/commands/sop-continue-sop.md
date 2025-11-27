@@ -1,10 +1,10 @@
 ---
-name: sop-workflow-continue-sop
+name: sop-continue-sop
 description: Continue working on existing SOP step-by-step with manual control
-usage: /sop-workflow-continue-sop [path/to/SOP.md]
+usage: /sop-continue-sop [path/to/SOP.md]
 examples:
-  - /sop-workflow-continue-sop
-  - /sop-workflow-continue-sop docs/SOP/auth/login/SOP.md
+  - /sop-continue-sop
+  - /sop-continue-sop docs/SOP/auth/login/SOP.md
 ---
 
 # Continue SOP Agent Command

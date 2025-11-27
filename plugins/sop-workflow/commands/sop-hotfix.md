@@ -1,10 +1,10 @@
 ---
-name: sop-workflow-hotfix
+name: sop-hotfix
 description: Handle urgent production fixes with minimal process overhead
-usage: /sop-workflow-hotfix [issue description]
+usage: /sop-hotfix [issue description]
 examples:
-  - /sop-workflow-hotfix production login broken
-  - /sop-workflow-hotfix checkout failing for all users
+  - /sop-hotfix production login broken
+  - /sop-hotfix checkout failing for all users
 ---
 
 # Hotfix Command

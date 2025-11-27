@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-close
+name: sop-close
 description: Close and archive completed SOP
-usage: /sop-workflow-close [quick|cancel|defer|archive]
+usage: /sop-close [quick|cancel|defer|archive]
 examples:
-  - /sop-workflow-close
-  - /sop-workflow-close archive
-  - /sop-workflow-close cancel
+  - /sop-close
+  - /sop-close archive
+  - /sop-close cancel
 ---
 
 # Close Command

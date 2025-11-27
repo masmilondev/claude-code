@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-deploy
+name: sop-deploy
 description: Execute deployment workflow with verification
-usage: /sop-workflow-deploy [preview|prod|dry-run]
+usage: /sop-deploy [preview|prod|dry-run]
 examples:
-  - /sop-workflow-deploy
-  - /sop-workflow-deploy preview
-  - /sop-workflow-deploy dry-run
+  - /sop-deploy
+  - /sop-deploy preview
+  - /sop-deploy dry-run
 ---
 
 # Deploy Command

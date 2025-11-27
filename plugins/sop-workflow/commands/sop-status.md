@@ -1,11 +1,11 @@
 ---
-name: sop-workflow-status
+name: sop-status
 description: View all active work and progress dashboard
-usage: /sop-workflow-status [full|sop-path]
+usage: /sop-status [full|sop-path]
 examples:
-  - /sop-workflow-status
-  - /sop-workflow-status full
-  - /sop-workflow-status docs/SOP/auth/login/SOP.md
+  - /sop-status
+  - /sop-status full
+  - /sop-status docs/SOP/auth/login/SOP.md
 ---
 
 # Status Command
