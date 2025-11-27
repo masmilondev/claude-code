@@ -1,11 +1,11 @@
 ---
-name: sop-sop
+name: sop-init
 description: Create new SOP/SOW for feature development, bug fixes, or tasks
-usage: /sop-sop [description of the task]
+usage: /sop-init [description of the task]
 examples:
-  - /sop-sop implement user authentication
-  - /sop-sop fix order bulk update bug
-  - /sop-sop add dark mode feature
+  - /sop-init implement user authentication
+  - /sop-init fix order bulk update bug
+  - /sop-init add dark mode feature
 ---
 
 # SOP/SOW Agent Command

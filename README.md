@@ -28,7 +28,7 @@ A comprehensive development workflow system that manages the entire software dev
 
 | Command | Description |
 |---------|-------------|
-| `/sop-sop` | Create new SOP for feature, bug fix, or task |
+| `/sop-init` | Create new SOP for feature, bug fix, or task |
 | `/sop-plan` | Create implementation plan |
 | `/sop-continue-sop` | Continue existing SOP step-by-step |
 | `/sop-continue-plan` | Continue existing plan |
@@ -46,7 +46,7 @@ A comprehensive development workflow system that manages the entire software dev
 ### Workflow Overview
 
 ```
-/sop-sop → Ideation → Planning → Development → Testing → Review → Deploy → Close
+/sop-init → Ideation → Planning → Development → Testing → Review → Deploy → Close
               auto      ⏸️pause      auto         auto      auto     auto    auto
 ```
 
@@ -56,7 +56,7 @@ The `/sop-continue-till-complete` command runs everything automatically, **only 
 
 ```bash
 # 1. Create SOP for your task
-/sop-sop fix the login bug where users can't reset passwords
+/sop-init fix the login bug where users can't reset passwords
 
 # 2. Run autonomous workflow (only pauses for plan approval)
 /sop-continue-till-complete
@@ -75,7 +75,7 @@ The `/sop-continue-till-complete` command runs everything automatically, **only 
 
 | Step | Command | Purpose |
 |------|---------|---------|
-| 1 | `/sop-sop` | Create SOP for your task |
+| 1 | `/sop-init` | Create SOP for your task |
 | 2 | `/sop-continue-till-complete` | Autonomous execution |
 | 3 | Manual testing | Test the implementation |
 | 4 | `/sop-add-issue` | Add any issues found |
