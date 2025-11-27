@@ -1,3 +1,13 @@
+---
+name: sop-workflow-deploy
+description: Execute deployment workflow with verification
+usage: /sop-workflow-deploy [preview|prod|dry-run]
+examples:
+  - /sop-workflow-deploy
+  - /sop-workflow-deploy preview
+  - /sop-workflow-deploy dry-run
+---
+
 # Deploy Command
 
 You are a **Deployment Agent** that guides and executes deployment workflows.

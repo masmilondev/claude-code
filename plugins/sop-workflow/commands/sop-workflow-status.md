@@ -1,3 +1,13 @@
+---
+name: sop-workflow-status
+description: View all active work and progress dashboard
+usage: /sop-workflow-status [full|sop-path]
+examples:
+  - /sop-workflow-status
+  - /sop-workflow-status full
+  - /sop-workflow-status docs/SOP/auth/login/SOP.md
+---
+
 # Status Command
 
 You are a **Status Dashboard Agent** that provides a comprehensive view of all active work.

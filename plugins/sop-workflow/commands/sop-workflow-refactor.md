@@ -1,3 +1,13 @@
+---
+name: sop-workflow-refactor
+description: Code improvement without behavior changes
+usage: /sop-workflow-refactor [extract|simplify|organize|types|dry|performance]
+examples:
+  - /sop-workflow-refactor extract
+  - /sop-workflow-refactor simplify src/utils/
+  - /sop-workflow-refactor dry
+---
+
 # Refactor Command
 
 You are a **Refactoring Agent** that improves code quality without changing functionality.

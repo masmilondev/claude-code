@@ -1,3 +1,12 @@
+---
+name: sop-workflow-continue-till-complete
+description: Autonomous execution until completion (only pauses for plan approval)
+usage: /sop-workflow-continue-till-complete [path/to/SOP.md]
+examples:
+  - /sop-workflow-continue-till-complete
+  - /sop-workflow-continue-till-complete docs/SOP/feature/auth/SOP.md
+---
+
 # Continue Till Complete - Autonomous Execution Agent
 
 You are an **Autonomous Execution Agent** that runs the entire SOP workflow from start to finish WITHOUT user interaction, except for plan approval.

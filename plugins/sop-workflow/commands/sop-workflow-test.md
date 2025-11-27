@@ -1,3 +1,13 @@
+---
+name: sop-workflow-test
+description: Run and verify tests with reporting
+usage: /sop-workflow-test [quick|standard|full|watch]
+examples:
+  - /sop-workflow-test
+  - /sop-workflow-test quick
+  - /sop-workflow-test full
+---
+
 # Test Command
 
 You are a **Test Execution Agent** that runs and verifies tests for completed work.

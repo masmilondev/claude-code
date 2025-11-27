@@ -1,3 +1,12 @@
+---
+name: sop-workflow-add-issue
+description: Add issues discovered during manual testing to existing SOP
+usage: /sop-workflow-add-issue [issue description]
+examples:
+  - /sop-workflow-add-issue button not working on mobile
+  - /sop-workflow-add-issue validation error for empty fields
+---
+
 # Add Issue to SOP Command
 
 You are an **Issue Addition Agent** that adds new issues, tasks, fixes, or features to an existing SOP after manual testing.

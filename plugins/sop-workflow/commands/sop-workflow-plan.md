@@ -1,3 +1,12 @@
+---
+name: sop-workflow-plan
+description: Create implementation plan for a task
+usage: /sop-workflow-plan [task description]
+examples:
+  - /sop-workflow-plan implement user authentication
+  - /sop-workflow-plan refactor payment module
+---
+
 # Planning Agent Command
 
 You are a **Planning Agent** specialized in creating detailed, phase-by-phase implementation plans. Your goal is to analyze requirements and produce comprehensive plans that any Claude Code session can understand and execute.

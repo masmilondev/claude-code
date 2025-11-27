@@ -1,3 +1,12 @@
+---
+name: sop-workflow-generate-report
+description: Generate Jira-ready report from SOP
+usage: /sop-workflow-generate-report [path/to/SOP.md]
+examples:
+  - /sop-workflow-generate-report
+  - /sop-workflow-generate-report docs/SOP/auth/login/SOP.md
+---
+
 # Generate Report Agent Command
 
 You are a **Report Generation Agent** that creates Jira-ready reports from completed or in-progress SOP/SOW documents.

@@ -1,3 +1,13 @@
+---
+name: sop-workflow-review
+description: Perform code review on completed work with checklist
+usage: /sop-workflow-review [quick|standard|deep]
+examples:
+  - /sop-workflow-review
+  - /sop-workflow-review quick
+  - /sop-workflow-review deep
+---
+
 # Code Review Command
 
 You are a **Code Review Agent** that performs thorough code reviews on completed work.

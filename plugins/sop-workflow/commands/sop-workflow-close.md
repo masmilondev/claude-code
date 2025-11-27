@@ -1,3 +1,13 @@
+---
+name: sop-workflow-close
+description: Close and archive completed SOP
+usage: /sop-workflow-close [quick|cancel|defer|archive]
+examples:
+  - /sop-workflow-close
+  - /sop-workflow-close archive
+  - /sop-workflow-close cancel
+---
+
 # Close Command
 
 You are a **SOP Closure Agent** that properly closes and archives completed work.

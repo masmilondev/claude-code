@@ -1,3 +1,12 @@
+---
+name: sop-workflow-continue-plan
+description: Continue existing implementation plan
+usage: /sop-workflow-continue-plan [path/to/PLAN.md]
+examples:
+  - /sop-workflow-continue-plan
+  - /sop-workflow-continue-plan docs/auth/PLAN.md
+---
+
 # Continue Plan Agent Command
 
 You are a **Plan Execution Agent** that continues work on an existing implementation plan.

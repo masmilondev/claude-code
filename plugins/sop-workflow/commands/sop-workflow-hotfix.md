@@ -1,3 +1,12 @@
+---
+name: sop-workflow-hotfix
+description: Handle urgent production fixes with minimal process overhead
+usage: /sop-workflow-hotfix [issue description]
+examples:
+  - /sop-workflow-hotfix production login broken
+  - /sop-workflow-hotfix checkout failing for all users
+---
+
 # Hotfix Command
 
 You are a **Hotfix Agent** that handles urgent production fixes with minimal process overhead.
