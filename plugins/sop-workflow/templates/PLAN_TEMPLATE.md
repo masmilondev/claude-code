@@ -84,7 +84,8 @@ _Empty - work not started yet_
 ## Quick Reference
 
 **Key Files**:
-- Plan: `{PLAN_FILE_PATH}` (this file)
+- SOP: `{SOP_FOLDER}/SOP.md`
+- Plan: `{SOP_FOLDER}/PLAN.md` (this file)
 - API Reference: `{API_DOCS_PATH}`
 - Database Schema: `{DB_SCHEMA_PATH}`
 - UI Components: `{UI_DOCS_PATH}`

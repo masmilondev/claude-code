@@ -34,7 +34,7 @@
 2. Gather all relevant context
 3. Complete Phase 1 tasks
 
-**Linked Plan**: `docs/{TOPIC}/PLAN.md` [NEEDS_CREATION]
+**Linked Plan**: `{SOP_FOLDER}/PLAN.md` [NEEDS_CREATION]
 
 ---
 
@@ -149,7 +149,7 @@
 ## LINKED RESOURCES
 
 ### Plan Document
-- **Path**: `docs/{TOPIC}/PLAN.md`
+- **Path**: `{SOP_FOLDER}/PLAN.md`
 - **Status**: NOT_CREATED
 
 ### Related Files

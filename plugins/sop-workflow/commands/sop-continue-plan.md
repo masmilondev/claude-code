@@ -4,7 +4,7 @@ description: Continue existing implementation plan
 usage: /sop-continue-plan [path/to/PLAN.md]
 examples:
   - /sop-continue-plan
-  - /sop-continue-plan docs/auth/PLAN.md
+  - /sop-continue-plan docs/SOP/0001_1430150620255_user-authentication/PLAN.md
 ---
 
 # Continue Plan Agent Command
@@ -153,15 +153,15 @@ After updating the plan, provide a summary:
 
 **Start fresh session**:
 ```
-Read docs/{topic}/PLAN.md and continue from where we left off
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md and continue from where we left off
 ```
 
 **Check progress**:
 ```
-Read docs/{topic}/PLAN.md and show me the current status
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md and show me the current status
 ```
 
 **Jump to specific task**:
 ```
-Read docs/{topic}/PLAN.md and work on Task {N.N}
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md and work on Task {N.N}
 ```

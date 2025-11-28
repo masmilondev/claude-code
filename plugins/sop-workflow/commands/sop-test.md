@@ -101,7 +101,7 @@ Track and categorize:
 
 ### Step 5: Generate Test Report
 
-Create `docs/SOP/{topic}/{subtopic}/TEST_REPORT.md` (or current directory):
+Create `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/TEST_REPORT.md` (or current directory):
 
 ```markdown
 # Test Report

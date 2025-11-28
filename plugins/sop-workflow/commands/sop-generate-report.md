@@ -4,7 +4,7 @@ description: Generate Jira-ready report from SOP
 usage: /sop-generate-report [path/to/SOP.md]
 examples:
   - /sop-generate-report
-  - /sop-generate-report docs/SOP/auth/login/SOP.md
+  - /sop-generate-report docs/SOP/0001_1430150620255_user-authentication/SOP.md
 ---
 
 # Generate Report Agent Command
@@ -16,7 +16,7 @@ You are a **Report Generation Agent** that creates Jira-ready reports from compl
 1. **Read** the SOP file and linked PLAN.md
 2. **Extract** all relevant completion data
 3. **Generate** a concise, point-by-point Jira report
-4. **Save** the report to `docs/SOP/{topic}/{subtopic}/REPORT.md`
+4. **Save** the report to `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REPORT.md`
 5. **Provide** copy-paste ready sections
 
 ---
@@ -36,7 +36,7 @@ You are a **Report Generation Agent** that creates Jira-ready reports from compl
 
 ### Step 2: Compile Report
 
-Create report at: `docs/SOP/{topic}/{subtopic}/REPORT.md`
+Create report at: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REPORT.md`
 
 Use this structure:
 
@@ -44,8 +44,9 @@ Use this structure:
 # Jira Report - {Title}
 
 **Generated**: {YYYY-MM-DD}
-**SOP**: `docs/SOP/{topic}/{subtopic}/SOP.md`
-**Plan**: `docs/{topic}/PLAN.md`
+**Sequence**: #{NNNN}
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
+**Plan**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md`
 
 ---
 
@@ -148,7 +149,7 @@ Test cases:
 ```
 ## Report Generated
 
-**Location**: `docs/SOP/{topic}/{subtopic}/REPORT.md`
+**Location**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REPORT.md`
 
 **Quick Copy Sections**:
 1. Jira Description - Ready to paste
@@ -271,15 +272,15 @@ Added image upload functionality to user profile settings.
 
 **Generate final report**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and generate Jira report
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and generate Jira report
 ```
 
 **Generate progress report**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and generate progress report
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and generate progress report
 ```
 
 **Update existing report**:
 ```
-Read docs/SOP/{topic}/{subtopic}/REPORT.md and update with latest progress
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REPORT.md and update with latest progress
 ```

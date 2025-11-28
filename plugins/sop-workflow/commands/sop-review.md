@@ -85,7 +85,7 @@ Perform systematic review using this checklist:
 
 ### Step 4: Generate Review Report
 
-Create review document at `docs/SOP/{topic}/{subtopic}/REVIEW.md` (or in current directory if no SOP):
+Create review document at `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REVIEW.md` (or in current directory if no SOP):
 
 ```markdown
 # Code Review Report

@@ -5,7 +5,7 @@ usage: /sop-status [full|sop-path]
 examples:
   - /sop-status
   - /sop-status full
-  - /sop-status docs/SOP/auth/login/SOP.md
+  - /sop-status docs/SOP/0001_1430150620255_user-authentication/SOP.md
 ---
 
 # Status Command
@@ -34,18 +34,24 @@ find docs/SOP -name "SOP.md" -type f
 ### Step 2: Parse Each SOP
 
 For each SOP found, extract:
+- **Sequence Number** (from folder name NNNN prefix)
 - Title
 - Status (IN_PROGRESS, COMPLETED, REOPENED, BLOCKED)
 - Current Phase
 - Priority
-- Created Date
+- Created Date (from HHMMDDMMYYYY in folder name)
 - Last Updated
 - Pending Tasks Count
+
+**Folder name format**: `{NNNN}_{HHMMDDMMYYYY}_{topic}`
+- NNNN: 4-digit sequence (0001, 0002...)
+- HHMMDDMMYYYY: Timestamp (24h hours, minutes, day, month, year)
+- topic: Descriptive name
 
 ### Step 3: Scan Related Work
 
 Also check for:
-- Pending plans in `docs/plans/`
+- Plans in same SOP folders: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md`
 - Active git branches
 - Uncommitted changes
 - Failed tests (from last run)
@@ -67,11 +73,12 @@ Display comprehensive dashboard:
 ### 1. {SOP Title}
 | Field | Value |
 |-------|-------|
-| Path | `docs/SOP/{topic}/{subtopic}/SOP.md` |
+| Sequence | #{NNNN} |
+| Path | `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md` |
 | Status | {IN_PROGRESS} |
 | Phase | {Planning / Development / Testing} |
 | Priority | {P0 / P1 / P2 / P3} |
-| Created | {DATE} |
+| Created | {DATE from folder name} |
 | Updated | {DATE} |
 | Progress | {N}/{M} tasks ({%}%) |
 
@@ -106,7 +113,7 @@ Display comprehensive dashboard:
 
 | Plan | Location | Status |
 |------|----------|--------|
-| {Title} | `docs/plans/{name}` | {Draft / Approved} |
+| {Title} | `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md` | {Draft / Approved} |
 
 ---
 
@@ -138,10 +145,10 @@ Display comprehensive dashboard:
 
 ## ⚡ Quick Actions
 
-1. `/sop-workflow:continue-sop` - Continue most recent SOP
-2. `/sop-workflow:continue-till-complete` - Auto-complete current SOP
-3. `/sop-workflow:add-issue` - Add issue to active SOP
-4. `/sop-workflow:sop` - Create new SOP
+1. `/sop-workflow:sop-continue-sop` - Continue most recent SOP (manual)
+2. `/sop-workflow:sop-continue` - Auto-complete current SOP
+3. `/sop-workflow:sop-add-issue` - Add issue to active SOP
+4. `/sop-workflow:sop-init` - Create new SOP
 
 ---
 
@@ -188,10 +195,10 @@ Based on status, suggest next actions:
 
 ### Active Work
 
-| # | SOP | Status | Progress | Priority |
-|---|-----|--------|----------|----------|
-| 1 | {Title} | {Phase} | {N}% | {P1} |
-| 2 | {Title} | {Phase} | {N}% | {P2} |
+| Seq | SOP | Status | Progress | Priority |
+|-----|-----|--------|----------|----------|
+| #0001 | {Title} | {Phase} | {N}% | {P1} |
+| #0002 | {Title} | {Phase} | {N}% | {P2} |
 
 ### Needs Attention
 ⚠️ {SOP with issues or blockers}

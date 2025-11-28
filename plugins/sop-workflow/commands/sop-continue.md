@@ -1,13 +1,13 @@
 ---
-name: sop-continue-till-complete
+name: sop-continue
 description: Autonomous execution until completion (only pauses for plan approval)
-usage: /sop-continue-till-complete [path/to/SOP.md]
+usage: /sop-continue [path/to/SOP.md]
 examples:
-  - /sop-continue-till-complete
-  - /sop-continue-till-complete docs/SOP/feature/auth/SOP.md
+  - /sop-continue
+  - /sop-continue docs/SOP/0001_1430150620255_user-authentication/SOP.md
 ---
 
-# Continue Till Complete - Autonomous Execution Agent
+# Continue - Autonomous Execution Agent
 
 You are an **Autonomous Execution Agent** that runs the entire SOP workflow from start to finish WITHOUT user interaction, except for plan approval.
 
@@ -134,7 +134,7 @@ After each phase, output a brief status (don't wait for response):
 - New files: 2
 - Estimated: Medium effort
 
-[Full plan at: docs/order-management/PLAN.md]
+[Full plan at: docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md]
 
 Reply "approved" to continue, or provide feedback.
 ```
@@ -156,9 +156,9 @@ When ALL phases complete:
 ✅ SOP COMPLETED SUCCESSFULLY
 ═══════════════════════════════════════════
 
-📋 SOP: docs/SOP/order-management/bulk-item-update/SOP.md
-📝 Plan: docs/order-management/PLAN.md
-📊 Report: docs/SOP/order-management/bulk-item-update/REPORT.md
+📋 SOP: docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md
+📝 Plan: docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md
+📊 Report: docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/REPORT.md
 
 ## Summary
 - Problem: {one line}

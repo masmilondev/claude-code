@@ -4,7 +4,7 @@ description: Continue working on existing SOP step-by-step with manual control
 usage: /sop-continue-sop [path/to/SOP.md]
 examples:
   - /sop-continue-sop
-  - /sop-continue-sop docs/SOP/auth/login/SOP.md
+  - /sop-continue-sop docs/SOP/0001_1430150620255_user-authentication/SOP.md
 ---
 
 # Continue SOP Agent Command
@@ -121,7 +121,8 @@ If in Development phase:
 ```
 ## SOP Progress Update
 
-**SOP**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
+**Sequence**: #{NNNN}
 **Phase**: {Current Phase}
 **Progress**: {X}% ({completed}/25)
 
@@ -134,7 +135,7 @@ If in Development phase:
 
 **Blockers**: {None | Description}
 
-**To Continue**: "Read docs/SOP/{topic}/{subtopic}/SOP.md and continue"
+**To Continue**: "Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and continue"
 ```
 
 ---
@@ -201,27 +202,27 @@ If in Development phase:
 
 **Continue from last point**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and continue
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and continue
 ```
 
 **Check current status**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and show status
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and show status
 ```
 
 **Jump to specific phase**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and work on Phase {N}
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and work on Phase {N}
 ```
 
 **Generate report now**:
 ```
-Read docs/SOP/{topic}/{subtopic}/SOP.md and generate Jira report
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md and generate Jira report
 ```
 
 **View linked plan**:
 ```
-Read docs/{topic}/PLAN.md and show progress
+Read docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md and show progress
 ```
 
 ---

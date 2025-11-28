@@ -154,8 +154,8 @@ If archiving requested:
 # Create archive directory
 mkdir -p docs/SOP/_archive/{YEAR}
 
-# Move SOP folder
-mv docs/SOP/{topic}/{subtopic} docs/SOP/_archive/{YEAR}/{topic}-{subtopic}
+# Move SOP folder (preserving sequence number)
+mv docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic} docs/SOP/_archive/{YEAR}/{NNNN}_{HHMMDDMMYYYY}_{topic}
 ```
 
 ### Step 7: Final Activity Log Entry
@@ -168,13 +168,14 @@ mv docs/SOP/{topic}/{subtopic} docs/SOP/_archive/{YEAR}/{topic}-{subtopic}
 
 If reporting requested, create final report:
 
-`docs/SOP/{topic}/{subtopic}/FINAL_REPORT.md`:
+`docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/FINAL_REPORT.md`:
 
 ```markdown
 # Final Report: {SOP Title}
 
 **Report Generated**: {DATE}
-**SOP Reference**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**Sequence**: #{NNNN}
+**SOP Reference**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 
 ---
 
@@ -276,7 +277,7 @@ If reporting requested, create final report:
 ```
 ## SOP Closed Successfully
 
-**SOP**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 **Status**: {COMPLETED | CANCELLED | DEFERRED}
 **Duration**: {N} days
 

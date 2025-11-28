@@ -63,7 +63,7 @@ git checkout -b refactor/{description}
 
 ### Step 3: Create Refactoring SOP
 
-`docs/SOP/refactor/{topic}/SOP.md`:
+`docs/SOP/{NNNN}_{HHMMDDMMYYYY}_refactor-{topic}/SOP.md`:
 
 ```markdown
 # REFACTOR: {Title}
@@ -189,7 +189,7 @@ git commit -m "refactor: {specific change}"
 
 ### Step 6: Generate Refactoring Report
 
-`docs/SOP/refactor/{topic}/REFACTOR_REPORT.md`:
+`docs/SOP/{NNNN}_{HHMMDDMMYYYY}_refactor-{topic}/REFACTOR_REPORT.md`:
 
 ```markdown
 # Refactoring Report
@@ -299,7 +299,7 @@ Mark SOP as completed, update activity log.
 ✅ All {N} tests passing
 ✅ No behavior changes
 
-**Report**: `docs/SOP/refactor/{topic}/REFACTOR_REPORT.md`
+**Report**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_refactor-{topic}/REFACTOR_REPORT.md`
 
 ### Next Steps
 1. Code review: `/sop-workflow:review`

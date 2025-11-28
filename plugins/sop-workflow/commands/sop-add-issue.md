@@ -82,13 +82,13 @@ Add to Activity Log:
 ```
 ## Issue Added to SOP
 
-**SOP**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 **Issue**: {Title}
 **Type**: {TYPE}
 
 **What would you like to do?**
 
-1. `/sop-workflow:continue-till-complete` - Fix autonomously
+1. `/sop-workflow:sop-continue` - Fix autonomously
 2. `/sop-workflow:continue-sop` - Fix step-by-step
 3. `/sop-workflow:add-issue` - Add another issue first
 4. `show sop` - Review the updated SOP
@@ -116,12 +116,12 @@ Keep SOP status as COMPLETED.
 ```
 ## Issue Added Successfully
 
-**SOP**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 **Issue #1**: {Title}
 **Status**: SOP REOPENED
 
 Choose next action:
-1. `/sop-workflow:continue-till-complete` - Fix now (autonomous)
+1. `/sop-workflow:sop-continue` - Fix now (autonomous)
 2. `/sop-workflow:continue-sop` - Fix now (manual)
 3. Add more issues first
 4. Leave for later

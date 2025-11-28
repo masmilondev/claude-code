@@ -32,7 +32,7 @@ Detailed technical implementation plans for development work.
 
 **Step 2: Run Autonomous Workflow (Recommended)**
 ```
-/continue-till-complete
+/sop-continue
 ```
 This runs the ENTIRE workflow automatically. **Only pauses once for plan approval.**
 
@@ -55,7 +55,7 @@ Then say "continue" after each phase.
 
 **Autonomous (recommended):**
 ```
-/continue-till-complete
+/sop-continue
 ```
 Finds the active SOP and completes it automatically.
 
@@ -95,7 +95,7 @@ or
 ├── commands/                    # Agent commands (use as /command)
 │   ├── sop.md                  # /sop - Create new SOP/SOW
 │   ├── continue-sop.md         # /continue-sop - Continue existing SOP
-│   ├── continue-till-complete.md # /continue-till-complete - AUTONOMOUS MODE
+│   ├── continue-till-complete.md # /sop-continue - AUTONOMOUS MODE
 │   ├── generate-report.md      # /generate-report - Generate Jira report
 │   ├── plan.md                 # /plan - Create implementation plan
 │   └── continue-plan.md        # /continue-plan - Continue existing plan

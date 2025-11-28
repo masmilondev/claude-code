@@ -62,20 +62,37 @@ When the user provides input, categorize it:
 
 ## SOP Structure
 
-Create the SOP file at: `docs/SOP/{topic}/{subtopic}/SOP.md`
+Create the SOP file at: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 
 ### Directory Structure
 ```
 docs/
-├── SOP/
-│   └── {topic}/
-│       └── {subtopic}/
-│           ├── SOP.md           # Main SOP document
-│           ├── REPORT.md        # Jira report (generated later)
-│           └── artifacts/       # Supporting files
-└── {topic}/
-    └── PLAN.md                  # Linked implementation plan
+└── SOP/
+    └── {NNNN}_{HHMMDDMMYYYY}_{topic}/
+        ├── SOP.md           # Main SOP document
+        ├── PLAN.md          # Implementation plan
+        ├── REPORT.md        # Jira report (generated later)
+        ├── REVIEW.md        # Code review report
+        ├── TEST_REPORT.md   # Test results
+        └── artifacts/       # Supporting files
 ```
+
+### Folder Naming Convention
+- **NNNN**: 4-digit sequential number (0001, 0002, 0003...) - helps identify latest
+- **HHMMDDMMYYYY**: Timestamp format
+  - HH: Hours (24-hour format)
+  - MM: Minutes
+  - DD: Day
+  - MM: Month
+  - YYYY: Year
+- **topic**: Descriptive topic name (kebab-case)
+
+**Example**: `docs/SOP/0001_1430150620255_user-authentication/`
+
+### Determining Next Sequence Number
+1. Scan existing folders in `docs/SOP/`
+2. Find highest NNNN prefix
+3. Increment by 1 (or start at 0001 if none exist)
 
 ---
 
@@ -116,7 +133,7 @@ docs/
 **Action Required**:
 1. {Next action}
 
-**Linked Plan**: `docs/{topic}/PLAN.md` [EXISTS | NEEDS_CREATION]
+**Linked Plan**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md` [EXISTS | NEEDS_CREATION]
 
 ---
 
@@ -231,7 +248,7 @@ docs/
 ## LINKED RESOURCES
 
 ### Plan Document
-- **Path**: `docs/{topic}/PLAN.md`
+- **Path**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md`
 - **Status**: {NOT_CREATED | IN_PROGRESS | COMPLETED}
 
 ### Related Files
@@ -300,9 +317,14 @@ Before marking as COMPLETED:
 ### Step 1: Classify and Initialize
 
 1. Determine document type (FEATURE/BUG/IDEA/TESTING)
-2. Extract topic and subtopic from request
-3. Create directory: `docs/SOP/{topic}/{subtopic}/`
-4. Initialize SOP.md from template
+2. Extract topic from request
+3. **Determine next sequence number**:
+   - Scan `docs/SOP/` for existing folders
+   - Find highest NNNN prefix (4-digit number)
+   - Increment by 1 (start at 0001 if none exist)
+4. **Generate timestamp**: HHMMDDMMYYYY (24h hours, minutes, day, month, year)
+5. Create directory: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/`
+6. Initialize SOP.md from template
 
 ### Step 2: Gather Context
 
@@ -313,9 +335,8 @@ Before marking as COMPLETED:
 
 ### Step 3: Check for Existing Plan
 
-1. Look for existing PLAN.md at `docs/{topic}/PLAN.md`
-2. If exists: Link and sync status
-3. If not exists: Note that planning phase will create one
+1. PLAN.md will be created in same SOP folder: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md`
+2. Note that planning phase will create the PLAN.md
 
 ### Step 4: Define Scope
 
@@ -326,9 +347,9 @@ Before marking as COMPLETED:
 
 ### Step 5: Save and Report
 
-1. Save SOP.md to correct location
+1. Save SOP.md to correct location: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 2. Create artifacts directory if needed
-3. Report summary to user
+3. Report summary to user with full path including sequence number
 
 ---
 
@@ -336,11 +357,12 @@ Before marking as COMPLETED:
 
 ### When SOP Reaches Phase 2.3 (Create/Link to PLAN.md)
 
-1. Check if `docs/{topic}/PLAN.md` exists
-2. If not, invoke planning agent:
+1. PLAN.md is created in same folder as SOP: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md`
+2. Invoke planning agent:
    ```
    Read .claude/commands/plan.md and create implementation plan for:
    {Requirements from SOP}
+   Save plan to: docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/PLAN.md
    ```
 3. Link the plan in SOP's LINKED RESOURCES section
 4. Sync progress between SOP and PLAN
@@ -361,7 +383,8 @@ After creating the SOP, respond with:
 ## SOP Created Successfully
 
 **Type**: {FEATURE | BUG_FIX | IDEA | TESTING}
-**Location**: `docs/SOP/{topic}/{subtopic}/SOP.md`
+**Sequence**: #{NNNN}
+**Location**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/SOP.md`
 
 **Summary**:
 - Problem: {Brief problem statement}
@@ -369,13 +392,13 @@ After creating the SOP, respond with:
 - Current Phase: Ideation
 
 **Next Step**:
-Run `/continue-till-complete` to execute the full workflow autonomously.
+Run `/sop-continue` to execute the full workflow autonomously.
 (Only pauses once for plan approval)
 
 **Other Commands**:
-- Manual step-by-step: "continue" (requires input after each phase)
-- Check status: `/continue-sop`
-- Generate report only: `/generate-report`
+- Manual step-by-step: `/sop-continue-sop`
+- Check status: `/sop-status`
+- Generate report only: `/sop-generate-report`
 ```
 
 ---

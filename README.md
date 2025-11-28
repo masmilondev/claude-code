@@ -32,7 +32,7 @@ A comprehensive development workflow system that manages the entire software dev
 | `/sop-plan` | Create implementation plan |
 | `/sop-continue-sop` | Continue existing SOP step-by-step |
 | `/sop-continue-plan` | Continue existing plan |
-| `/sop-continue-till-complete` | **AUTONOMOUS** - Run full workflow (only pauses for plan approval) |
+| `/sop-continue` | **AUTONOMOUS** - Run full workflow (only pauses for plan approval) |
 | `/sop-add-issue` | Add issues discovered during manual testing |
 | `/sop-review` | Perform code review with checklist |
 | `/sop-test` | Run and verify tests with reporting |
@@ -50,7 +50,7 @@ A comprehensive development workflow system that manages the entire software dev
               auto      ⏸️pause      auto         auto      auto     auto    auto
 ```
 
-The `/sop-continue-till-complete` command runs everything automatically, **only pausing once** for plan approval.
+The `/sop-continue` command runs everything automatically, **only pausing once** for plan approval.
 
 ### Quick Start
 
@@ -59,7 +59,7 @@ The `/sop-continue-till-complete` command runs everything automatically, **only 
 /sop-init fix the login bug where users can't reset passwords
 
 # 2. Run autonomous workflow (only pauses for plan approval)
-/sop-continue-till-complete
+/sop-continue
 
 # 3. After manual testing, add any issues found
 /sop-add-issue button doesn't work on mobile
@@ -76,7 +76,7 @@ The `/sop-continue-till-complete` command runs everything automatically, **only 
 | Step | Command | Purpose |
 |------|---------|---------|
 | 1 | `/sop-init` | Create SOP for your task |
-| 2 | `/sop-continue-till-complete` | Autonomous execution |
+| 2 | `/sop-continue` | Autonomous execution |
 | 3 | Manual testing | Test the implementation |
 | 4 | `/sop-add-issue` | Add any issues found |
 | 5 | `/sop-review` | Code review checklist |
@@ -120,17 +120,22 @@ Bypasses normal SOP process for urgent fixes.
 
 ```
 your-project/
-├── docs/
-│   ├── SOP/
-│   │   └── {topic}/
-│   │       └── {subtopic}/
-│   │           ├── SOP.md           # Main SOP document
-│   │           ├── REPORT.md        # Jira-ready report
-│   │           ├── REVIEW.md        # Code review report
-│   │           └── TEST_REPORT.md   # Test results
-│   └── {topic}/
-│       └── PLAN.md                  # Implementation plan
+└── docs/
+    └── SOP/
+        └── {NNNN}_{HHMMDDMMYYYY}_{topic}/
+            ├── SOP.md           # Main SOP document
+            ├── PLAN.md          # Implementation plan
+            ├── REPORT.md        # Jira-ready report
+            ├── REVIEW.md        # Code review report
+            └── TEST_REPORT.md   # Test results
 ```
+
+**Folder Naming Convention:**
+- `NNNN`: 4-digit sequence (0001, 0002...) - identifies latest
+- `HHMMDDMMYYYY`: Timestamp (24h hours, minutes, day, month, year)
+- `topic`: Descriptive name (kebab-case)
+
+**Example:** `docs/SOP/0001_1430150620255_user-authentication/`
 
 ---
 

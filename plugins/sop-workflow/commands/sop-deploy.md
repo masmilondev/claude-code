@@ -133,7 +133,7 @@ After deployment:
 
 ### Step 5: Generate Deployment Log
 
-Create `docs/SOP/{topic}/{subtopic}/DEPLOY_LOG.md`:
+Create `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_{topic}/DEPLOY_LOG.md`:
 
 ```markdown
 # Deployment Log

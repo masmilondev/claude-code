@@ -131,7 +131,7 @@ git push origin hotfix/{issue-description}
 
 After fix is deployed, create minimal SOP for tracking:
 
-`docs/SOP/hotfix/{date}-{issue}/SOP.md`:
+`docs/SOP/{NNNN}_{HHMMDDMMYYYY}_hotfix-{issue}/SOP.md`:
 
 ```markdown
 # HOTFIX: {Title}
@@ -254,7 +254,7 @@ After deployment is stable:
 - [ ] Code review
 - [ ] Root cause analysis
 
-**SOP**: `docs/SOP/hotfix/{date}-{issue}/SOP.md`
+**SOP**: `docs/SOP/{NNNN}_{HHMMDDMMYYYY}_hotfix-{issue}/SOP.md`
 ```
 
 ---
