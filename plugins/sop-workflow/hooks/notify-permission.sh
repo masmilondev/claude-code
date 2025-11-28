@@ -1,86 +1,151 @@
 #!/bin/bash
 
 # =============================================================================
-# Discord Notification Hook for ALL Permission Requests
+# Discord Notification Hook for Permission Requests (PreToolUse)
 # Part of sop-workflow plugin
 # =============================================================================
 # Waits 10 seconds before sending notification
-# Gives user time to respond before notification is sent
+# If user responds within 10 seconds, notification is cancelled
+# PostToolUse hook (cancel-notification.sh) marks as "responded"
 # =============================================================================
 
-# Discord Webhook URL
+# Discord Webhook URL - UPDATE THIS or set DISCORD_WEBHOOK_URL env var
 DISCORD_WEBHOOK="${DISCORD_WEBHOOK_URL:-YOUR_WEBHOOK_URL_HERE}"
 
 # Delay before sending notification (seconds)
 NOTIFICATION_DELAY="${NOTIFICATION_DELAY:-10}"
 
-# Get tool name and input
-TOOL_NAME="$1"
-TOOL_INPUT="$2"
+# Read stdin
+INPUT=$(cat)
 
-# Current timestamp (captured now, before delay)
+# Generate unique ID
+REQUEST_ID="$(date +%s)_$$"
+MARKER_FILE="/tmp/claude-perm-${REQUEST_ID}"
+DATA_FILE="/tmp/claude-notif-data-${REQUEST_ID}"
+
+# Create marker
+echo "pending" > "$MARKER_FILE"
+
+# Extract tool info
+TOOL_NAME=$(echo "$INPUT" | grep -o '"tool_name"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//')
+[ -z "$TOOL_NAME" ] && TOOL_NAME="Unknown"
+
+FILE_PATH=$(echo "$INPUT" | grep -o '"file_path"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//')
+COMMAND=$(echo "$INPUT" | grep -o '"command"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//' | head -c 300)
+OLD_STRING=$(echo "$INPUT" | grep -o '"old_string"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//' | head -c 200)
+NEW_STRING=$(echo "$INPUT" | grep -o '"new_string"[[:space:]]*:[[:space:]]*"[^"]*"' | head -1 | sed 's/.*: *"//' | sed 's/"$//' | head -c 200)
+
 TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+HOSTNAME=$(hostname -s)
 
-# Working directory
-WORKING_DIR=$(pwd)
+# Build message content based on tool type
+if [ "$TOOL_NAME" = "Edit" ]; then
+    FILENAME=$(basename "$FILE_PATH" 2>/dev/null || echo "unknown")
+    # Clean strings - remove literal \n and extra spaces
+    OLD_CLEAN=$(echo "$OLD_STRING" | sed 's/\\n/ /g' | sed 's/\\t/ /g' | tr -s ' ')
+    NEW_CLEAN=$(echo "$NEW_STRING" | sed 's/\\n/ /g' | sed 's/\\t/ /g' | tr -s ' ')
 
-# Computer/hostname
-HOSTNAME=$(hostname)
+    CONTENT="✏️ **Claude Code - Edit Request**
 
-# Determine emoji based on tool type
-case "$TOOL_NAME" in
-    *rm*|*delete*|*Remove*)
-        EMOJI="🗑️"
-        ACTION="Delete"
-        ;;
-    *Bash*)
-        EMOJI="⚡"
-        ACTION="Run Command"
-        ;;
-    *Write*)
-        EMOJI="📝"
-        ACTION="Write File"
-        ;;
-    *Edit*)
-        EMOJI="✏️"
-        ACTION="Edit File"
-        ;;
-    *Execute*)
-        EMOJI="🚀"
-        ACTION="Execute"
-        ;;
-    *)
-        EMOJI="🔔"
-        ACTION="Permission"
-        ;;
-esac
+🖥️ **Host:** $HOSTNAME
+🕐 **Time:** $TIMESTAMP
 
-# Truncate long input for Discord (max 1500 chars)
-TOOL_INPUT_DISPLAY="$TOOL_INPUT"
-if [ ${#TOOL_INPUT_DISPLAY} -gt 1500 ]; then
-    TOOL_INPUT_DISPLAY="${TOOL_INPUT_DISPLAY:0:1500}..."
+📄 **File:** \`$FILENAME\`
+
+🔴 **Remove:**
+\`\`\`
+$OLD_CLEAN
+\`\`\`
+
+🟢 **Add:**
+\`\`\`
+$NEW_CLEAN
+\`\`\`
+
+**Do you want to make this edit?**
+
+⏱️ _Waiting for your response..._
+
+━━━━━━━━━━━━━━━━━━━━━━
+**Reply:** \`0\` ⎋ Esc  |  \`1\` ✅ Yes  |  \`2\` ✅ Yes all  |  \`3 msg\` ❌ No"
+
+elif [ "$TOOL_NAME" = "Write" ]; then
+    FILENAME=$(basename "$FILE_PATH" 2>/dev/null || echo "unknown")
+
+    CONTENT="📝 **Claude Code - Write Request**
+
+🖥️ **Host:** $HOSTNAME
+🕐 **Time:** $TIMESTAMP
+
+📄 **File:** \`$FILENAME\`
+
+Create or overwrite this file.
+
+**Do you want to write this file?**
+
+⏱️ _Waiting for your response..._
+
+━━━━━━━━━━━━━━━━━━━━━━
+**Reply:** \`0\` ⎋ Esc  |  \`1\` ✅ Yes  |  \`2\` ✅ Yes all  |  \`3 msg\` ❌ No"
+
+elif [ "$TOOL_NAME" = "Bash" ]; then
+    CMD_CLEAN=$(echo "$COMMAND" | sed 's/\\n/ /g' | sed 's/\\t/ /g' | tr -s ' ')
+
+    CONTENT="⚡ **Claude Code - Run Command**
+
+🖥️ **Host:** $HOSTNAME
+🕐 **Time:** $TIMESTAMP
+
+💻 **Command:**
+\`\`\`
+$CMD_CLEAN
+\`\`\`
+
+**Do you want to run this command?**
+
+⏱️ _Waiting for your response..._
+
+━━━━━━━━━━━━━━━━━━━━━━
+**Reply:** \`0\` ⎋ Esc  |  \`1\` ✅ Yes  |  \`2\` ✅ Yes all  |  \`3 msg\` ❌ No"
+
+else
+    CONTENT="🔔 **Claude Code - Permission Request**
+
+🖥️ **Host:** $HOSTNAME
+🕐 **Time:** $TIMESTAMP
+
+🔧 **Action:** $TOOL_NAME
+
+**Do you want to allow this?**
+
+⏱️ _Waiting for your response..._
+
+━━━━━━━━━━━━━━━━━━━━━━
+**Reply:** \`0\` ⎋ Esc  |  \`1\` ✅ Yes  |  \`2\` ✅ Yes all  |  \`3 msg\` ❌ No"
 fi
 
-# Escape special characters for JSON (macOS compatible)
-TOOL_INPUT_ESCAPED=$(printf '%s' "$TOOL_INPUT_DISPLAY" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | tr '\n' ' ')
+# Save content to file for background process
+echo "$CONTENT" > "$DATA_FILE"
 
-# Background process that waits then sends notification
-(
-    # Wait for the delay - gives user time to respond
-    sleep "$NOTIFICATION_DELAY"
+# Background process
+nohup bash -c "
+    sleep $NOTIFICATION_DELAY
 
-    # Send Discord notification with response instructions
-    MESSAGE=$(cat <<EOF
-{
-  "content": "${EMOJI} **Claude Code Permission Request** ${EMOJI}\n\n**Computer:** ${HOSTNAME}\n**Time:** ${TIMESTAMP}\n**Directory:** ${WORKING_DIR}\n**Action:** ${ACTION}\n**Tool:** \`${TOOL_NAME}\`\n\n**Details:**\n\`\`\`\n${TOOL_INPUT_ESCAPED}\n\`\`\`\n\n⏱️ No response for ${NOTIFICATION_DELAY}s - Waiting for your approval!\n\n**Reply with:**\n\`1\` → Yes (approve)\n\`2\` → Yes, allow all this session\n\`3 <message>\` → No, with custom response"
-}
-EOF
-)
+    if [ -f '$MARKER_FILE' ] && [ \"\$(cat '$MARKER_FILE' 2>/dev/null)\" = 'pending' ]; then
+        # Use python to create proper JSON
+        python3 << 'PYEOF'
+import json
+with open('$DATA_FILE', 'r') as f:
+    content = f.read()
+payload = json.dumps({'content': content})
+with open('/tmp/discord-payload-$REQUEST_ID.json', 'w') as f:
+    f.write(payload)
+PYEOF
 
-    # Send to Discord
-    curl -s -H "Content-Type: application/json" -d "$MESSAGE" "$DISCORD_WEBHOOK" > /dev/null 2>&1
-) &
+        curl -s -H 'Content-Type: application/json' -d @/tmp/discord-payload-$REQUEST_ID.json '$DISCORD_WEBHOOK' >/dev/null 2>&1
+        rm -f /tmp/discord-payload-$REQUEST_ID.json
+    fi
+    rm -f '$MARKER_FILE' '$DATA_FILE'
+" >/dev/null 2>&1 &
 
-# Exit with 0 to allow the permission prompt to continue
-# The background process will handle the delayed notification
-exit 0
+echo '{}'

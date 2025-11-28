@@ -6,7 +6,7 @@ examples:
   - /sop-setup
 ---
 
-# SOP Setup Command
+# SOP Workflow Setup Command
 
 You are a **Setup Agent** that configures Claude Code settings for the sop-workflow plugin.
 
@@ -15,63 +15,141 @@ You are a **Setup Agent** that configures Claude Code settings for the sop-workf
 - After installing the sop-workflow plugin on a new computer
 - To reset/repair plugin configuration
 - To update permissions and hooks
+- To install Discord bot for remote control
 
 ---
 
 ## What This Setup Does
 
-### 1. Auto-Approve Permissions
-These operations will no longer ask for confirmation:
-- `Edit` - File edits
-- `Write` - File creation
-- `Bash(mkdir:*)` - Directory creation
-- `Bash(mv:*)` - Move/rename files
-- `Bash(cp:*)` - Copy files
+### 1. Permission Notification Hooks
+When Claude asks for permission and you don't respond within 10 seconds:
+- Sends Discord notification with details
+- Shows file name, changes, and options
+- Allows remote response via Discord bot
 
-### 2. Discord Notification Hook
-When ANY Bash command needs permission:
-- Sends Discord notification immediately
-- Shows tool name, command details, and timestamp
-- Still asks for your confirmation in terminal
-- Keeps you informed even when away from computer
+### 2. Discord Bot (Optional)
+Remote control for permission prompts:
+- `0` → Escape (cancel)
+- `1` → Yes (approve)
+- `2` → Yes, allow all this session
+- `3 <msg>` → No, with message
 
 ---
 
 ## Execution Protocol
 
-### Step 1: Read Current Settings
+### Step 1: Ask User for Discord Webhook URL
 
-Read the file `~/.claude/settings.local.json` to check current configuration.
+Ask the user:
+```
+To enable Discord notifications, I need your Discord webhook URL.
 
-### Step 2: Read Template
+**How to get it:**
+1. Go to your Discord server
+2. Right-click a channel → Edit Channel → Integrations → Webhooks
+3. Create a webhook and copy the URL
 
-Read the template from `~/.claude/plugins/marketplaces/claude-code/utils/settings-template.json`
+**Enter your Discord webhook URL** (or type "skip" to skip Discord setup):
+```
 
-### Step 3: Merge Settings
+Store their response in `WEBHOOK_URL`.
 
-Update `~/.claude/settings.local.json` with:
+### Step 2: Ask for Discord Bot Token (Optional)
+
+If they provided a webhook URL, ask:
+```
+Do you want to set up the Discord bot for remote control?
+This lets you respond to permission prompts from Discord.
+
+**To create a bot:**
+1. Go to https://discord.com/developers/applications
+2. Create New Application → Bot → Reset Token → Copy
+3. Enable "Message Content Intent" under Bot settings
+4. Invite bot to your server with: Messages permissions
+
+**Enter your Discord bot token** (or type "skip" to skip bot setup):
+```
+
+Store their response in `BOT_TOKEN`.
+
+### Step 3: Update Notification Script
+
+Read and update the file:
+`~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh`
+
+Replace the DISCORD_WEBHOOK line with user's URL:
+```bash
+DISCORD_WEBHOOK="USER_PROVIDED_URL"
+```
+
+### Step 4: Update User Settings (~/.claude/settings.local.json)
+
+Read current `~/.claude/settings.local.json` if exists.
+
+Merge/update with these hooks (preserve existing permissions):
 
 ```json
 {
   "permissions": {
-    "allow": [
-      "Edit",
-      "Write",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(cp:*)"
-    ],
+    "allow": [],
     "deny": [],
     "ask": []
   },
   "hooks": {
     "PreToolUse": [
       {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh"
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh \"Bash\" \"$TOOL_INPUT\""
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/cancel-notification.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/cancel-notification.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/cancel-notification.sh"
           }
         ]
       }
@@ -80,75 +158,130 @@ Update `~/.claude/settings.local.json` with:
 }
 ```
 
-**IMPORTANT**: Preserve any existing permissions the user already has. Only ADD the new permissions, don't remove existing ones.
+**IMPORTANT:**
+- Replace `USERNAME` with actual username from `whoami` command
+- Use ABSOLUTE paths (not ~) for hook commands
+- Preserve any existing permissions user already has
 
-### Step 4: Ensure Hook Script is Executable
+### Step 5: Update Project Settings (if in a project)
 
-Run:
+If there's a `.claude/settings.local.json` in the current project directory, add the same hooks there too.
+
+### Step 6: Make Scripts Executable
+
 ```bash
-chmod +x ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh
+chmod +x ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/*.sh
 ```
 
-### Step 5: Verify Discord Webhook
+### Step 7: Install Discord Bot Dependencies (if bot token provided)
 
-Check if the webhook URL is configured in:
-`~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh`
+If user provided a bot token:
+
+```bash
+cd ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/discord-bot
+npm install
+```
+
+### Step 8: Configure Discord Bot (if bot token provided)
+
+Update `~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/discord-bot/config.json`:
+
+```json
+{
+  "DISCORD_BOT_TOKEN": "USER_PROVIDED_TOKEN",
+  "ALLOWED_USER_IDS": [],
+  "CHANNEL_ID": null,
+  "TERMINAL_APP": "Cursor"
+}
+```
+
+Ask user which terminal they use:
+- `Cursor` (default for Cursor IDE)
+- `Terminal` (macOS Terminal)
+- `iTerm` (iTerm2)
+
+### Step 9: Start Discord Bot (if configured)
+
+```bash
+cd ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/discord-bot
+pkill -f "node bot.js" 2>/dev/null
+node bot.js > bot.log 2>&1 &
+```
+
+### Step 10: Test Discord Webhook
+
+```bash
+curl -s -H "Content-Type: application/json" \
+  -d '{"content":"✅ SOP Workflow setup complete! Discord notifications are working."}' \
+  "WEBHOOK_URL"
+```
 
 ---
 
 ## Output Format
 
-```
-## SOP Workflow Setup Complete
+After completion, display:
 
-### Permissions Configured
-| Permission | Status |
-|------------|--------|
-| Edit | ✅ Auto-approve |
-| Write | ✅ Auto-approve |
-| mkdir | ✅ Auto-approve |
-| mv | ✅ Auto-approve |
-| cp | ✅ Auto-approve |
-| rm | ⚠️ Ask + Discord notification |
+```
+## ✅ SOP Workflow Setup Complete
+
+### Discord Notifications
+| Setting | Value |
+|---------|-------|
+| Webhook | ✅ Configured |
+| Delay | 10 seconds |
 
 ### Hooks Configured
-| Hook | Trigger | Action |
-|------|---------|--------|
-| notify-permission.sh | Bash (all) | Discord notification |
+| Event | Tools | Action |
+|-------|-------|--------|
+| PreToolUse | Edit, Write, Bash | Send notification after 10s |
+| PostToolUse | Edit, Write, Bash | Cancel notification if responded |
 
-### Discord Webhook
-**Status**: {Configured | Not configured}
-**URL**: {masked URL or "Not set"}
+### Discord Bot
+| Setting | Value |
+|---------|-------|
+| Status | ✅ Running / ⏭️ Skipped |
+| Terminal | Cursor/Terminal/iTerm |
 
-### Next Steps
-1. **Restart Claude Code** for changes to take effect
-2. Test by running any `/sop-` command
+### Commands Available
+| Command | Description |
+|---------|-------------|
+| `0` | Escape (cancel) |
+| `1` or `y` | Yes (approve) |
+| `2` | Yes, allow all this session |
+| `3 <msg>` | No, with message |
 
-### To Customize Discord Webhook
-Edit: `~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh`
+### ⚠️ Important
+**Restart Claude Code** for hook changes to take effect!
+
+### Test It
+1. Restart Claude Code
+2. Ask Claude to edit a file
+3. Wait 10 seconds without responding
+4. Check Discord for notification
+5. Reply with `1` to approve
 ```
 
 ---
 
-## If Settings File Doesn't Exist
+## Troubleshooting Section
 
-Create a new `~/.claude/settings.local.json` with the full template.
+If user reports issues:
 
----
+### Hooks not triggering
+1. Check absolute path in settings (not ~)
+2. Restart Claude Code completely
+3. Check project-level settings.local.json if in a project
 
-## Troubleshooting
-
-### If hooks don't work after setup
-1. Restart Claude Code completely (Cmd+Q, then reopen)
-2. Run `/sop-setup` again
-
-### If Discord notifications don't arrive
-1. Check webhook URL in `notify-permission.sh`
-2. Test webhook manually:
+### Discord notifications not arriving
+1. Test webhook manually:
    ```bash
-   curl -H "Content-Type: application/json" -d '{"content":"Test"}' YOUR_WEBHOOK_URL
+   curl -H "Content-Type: application/json" -d '{"content":"Test"}' "WEBHOOK_URL"
    ```
+2. Check webhook URL in notify-permission.sh
 
-### If permissions still ask for confirmation
-1. Check `~/.claude/settings.local.json` is valid JSON
-2. Restart Claude Code
+### Bot not responding
+1. Check bot is running: `ps aux | grep bot.js`
+2. Check bot log: `cat ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/discord-bot/bot.log`
+3. Restart bot: `/sop-restart-discord`
+4. Ensure bot has Message Content Intent enabled in Discord Developer Portal

@@ -6,6 +6,7 @@
  * Remote control for Claude Code permission prompts via Discord
  *
  * Commands:
+ *   0       - Escape (cancel/dismiss)
  *   1       - Yes (approve)
  *   2       - Yes, allow all edits this session
  *   3 <msg> - No, with custom message
@@ -34,7 +35,7 @@ const {
     DISCORD_BOT_TOKEN,
     ALLOWED_USER_IDS = [],
     CHANNEL_ID = null,
-    TERMINAL_APP = 'Terminal' // or 'iTerm'
+    TERMINAL_APP = 'Terminal' // or 'iTerm' or 'Cursor'
 } = config;
 
 if (!DISCORD_BOT_TOKEN) {
@@ -52,6 +53,30 @@ const client = new Client({
     ],
     partials: [Partials.Channel, Partials.Message]
 });
+
+/**
+ * Send Escape key to terminal using AppleScript
+ */
+function sendEscapeKey(callback) {
+    const script = `
+        tell application "${TERMINAL_APP}"
+            activate
+            delay 0.2
+            tell application "System Events"
+                key code 53
+            end tell
+        end tell
+    `;
+
+    exec(`osascript -e '${script.replace(/'/g, "'\"'\"'")}'`, (error, stdout, stderr) => {
+        if (error) {
+            console.error('AppleScript error:', error.message);
+            callback(false, error.message);
+        } else {
+            callback(true);
+        }
+    });
+}
 
 /**
  * Send keystroke to terminal using AppleScript
@@ -141,6 +166,7 @@ client.once('ready', () => {
     console.log(`║  Terminal: ${TERMINAL_APP.padEnd(44)}║`);
     console.log('╠════════════════════════════════════════════════════════╣');
     console.log('║  Commands:                                              ║');
+    console.log('║    0        → Escape (cancel/dismiss)                   ║');
     console.log('║    1        → Yes (approve)                             ║');
     console.log('║    2        → Yes, allow all this session               ║');
     console.log('║    3 <msg>  → No, with custom response                  ║');
@@ -171,8 +197,12 @@ client.on('messageCreate', async (message) => {
     // Parse command
     let response = null;
     let customMessage = null;
+    let isEscape = false;
 
-    if (content === '1' || content.toLowerCase() === 'y' || content.toLowerCase() === 'yes') {
+    if (content === '0' || content.toLowerCase() === 'esc' || content.toLowerCase() === 'escape') {
+        response = '0';
+        isEscape = true;
+    } else if (content === '1' || content.toLowerCase() === 'y' || content.toLowerCase() === 'yes') {
         response = '1';
     } else if (content === '2') {
         response = '2';
@@ -193,30 +223,46 @@ client.on('messageCreate', async (message) => {
     console.log(`[${new Date().toISOString()}] Command from ${message.author.username}: ${content}`);
 
     // Send to terminal
-    if (response === '3' && customMessage) {
+    if (isEscape) {
+        sendEscapeKey(async (success, error) => {
+            try {
+                if (success) {
+                    await message.react('✅');
+                    console.log(`  → Sent Escape key`);
+                } else {
+                    await message.react('❌');
+                    console.error(`  → Failed: ${error}`);
+                }
+            } catch (e) {
+                console.log(`  → Sent (reaction failed)`);
+            }
+        });
+    } else if (response === '3' && customMessage) {
         sendOptionWithMessage(response, customMessage, async (success, error) => {
-            if (success) {
-                await message.reactions.removeAll();
-                await message.react('✅');
-                console.log(`  → Sent option ${response} with message: "${customMessage}"`);
-            } else {
-                await message.reactions.removeAll();
-                await message.react('❌');
-                await message.reply(`Failed to send: ${error}`);
-                console.error(`  → Failed: ${error}`);
+            try {
+                if (success) {
+                    await message.react('✅');
+                    console.log(`  → Sent option ${response} with message: "${customMessage}"`);
+                } else {
+                    await message.react('❌');
+                    console.error(`  → Failed: ${error}`);
+                }
+            } catch (e) {
+                console.log(`  → Sent (reaction failed)`);
             }
         });
     } else {
         sendToTerminal(response, async (success, error) => {
-            if (success) {
-                await message.reactions.removeAll();
-                await message.react('✅');
-                console.log(`  → Sent option ${response}`);
-            } else {
-                await message.reactions.removeAll();
-                await message.react('❌');
-                await message.reply(`Failed to send: ${error}`);
-                console.error(`  → Failed: ${error}`);
+            try {
+                if (success) {
+                    await message.react('✅');
+                    console.log(`  → Sent option ${response}`);
+                } else {
+                    await message.react('❌');
+                    console.error(`  → Failed: ${error}`);
+                }
+            } catch (e) {
+                console.log(`  → Sent (reaction failed)`);
             }
         });
     }
