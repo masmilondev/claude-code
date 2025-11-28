@@ -20,27 +20,5 @@
     "deployment",
     "hotfix",
     "refactoring"
-  ],
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash(rm:*)",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "$PLUGIN_DIR/hooks/notify-delete.sh \"$TOOL_INPUT\""
-          }
-        ]
-      }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Edit",
-      "Write",
-      "Bash(mkdir:*)",
-      "Bash(mv:*)",
-      "Bash(cp:*)"
-    ]
-  }
+  ]
 }
