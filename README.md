@@ -116,6 +116,42 @@ Bypasses normal SOP process for urgent fixes.
 /sop-status full   # Full dashboard with metrics
 ```
 
+### Auto-Permissions & Hooks
+
+This plugin includes:
+
+**Auto-approved operations** (no confirmation needed):
+- `Edit` - File edits
+- `Write` - File creation
+- `Bash(mkdir:*)` - Directory creation
+- `Bash(mv:*)` - Move/rename
+- `Bash(cp:*)` - Copy
+
+**Protected operations** (requires confirmation + Discord notification):
+- `Bash(rm:*)` - Delete operations send Discord alert before prompting
+
+#### Discord Notifications Setup
+
+When Claude requests to delete files, you'll receive a Discord notification:
+
+```
+🗑️ Delete Request Alert 🗑️
+
+Computer: your-mac
+Time: 2025-11-28 14:30:45
+Directory: /path/to/project
+Command: rm -rf some-folder/
+
+⚠️ Claude Code is requesting to delete files.
+⏱️ Waiting for your approval in terminal...
+```
+
+**To configure your own Discord webhook:**
+
+1. Create webhook in Discord: Server Settings → Integrations → Webhooks
+2. Copy `hooks/config.example.sh` to `hooks/config.sh`
+3. Update `DISCORD_WEBHOOK_URL` with your webhook
+
 ### Project Output Structure
 
 ```

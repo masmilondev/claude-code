@@ -1,6 +1,6 @@
 {
   "name": "sop-workflow",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Complete SOP/SOW Workflow System - Project management with autonomous execution, code review, testing, deployment, hotfixes, refactoring, and Jira reporting",
   "author": {
     "name": "masmilon"
@@ -20,5 +20,27 @@
     "deployment",
     "hotfix",
     "refactoring"
-  ]
+  ],
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(rm:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$PLUGIN_DIR/hooks/notify-delete.sh \"$TOOL_INPUT\""
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)"
+    ]
+  }
 }
