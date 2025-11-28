@@ -61,18 +61,18 @@ if [ ${#TOOL_INPUT_DISPLAY} -gt 1500 ]; then
     TOOL_INPUT_DISPLAY="${TOOL_INPUT_DISPLAY:0:1500}..."
 fi
 
-# Escape special characters for JSON
-TOOL_INPUT_ESCAPED=$(echo "$TOOL_INPUT_DISPLAY" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed ':a;N;$!ba;s/\n/\\n/g')
+# Escape special characters for JSON (macOS compatible)
+TOOL_INPUT_ESCAPED=$(printf '%s' "$TOOL_INPUT_DISPLAY" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | tr '\n' ' ')
 
 # Background process that waits then sends notification
 (
     # Wait for the delay - gives user time to respond
     sleep "$NOTIFICATION_DELAY"
 
-    # Send Discord notification
+    # Send Discord notification with response instructions
     MESSAGE=$(cat <<EOF
 {
-  "content": "${EMOJI} **Claude Code Permission Request** ${EMOJI}\n\n**Computer:** ${HOSTNAME}\n**Time:** ${TIMESTAMP}\n**Directory:** ${WORKING_DIR}\n**Action:** ${ACTION}\n**Tool:** \`${TOOL_NAME}\`\n\n**Details:**\n\`\`\`\n${TOOL_INPUT_ESCAPED}\n\`\`\`\n\n⏱️ No response for ${NOTIFICATION_DELAY}s - Waiting for your approval in terminal..."
+  "content": "${EMOJI} **Claude Code Permission Request** ${EMOJI}\n\n**Computer:** ${HOSTNAME}\n**Time:** ${TIMESTAMP}\n**Directory:** ${WORKING_DIR}\n**Action:** ${ACTION}\n**Tool:** \`${TOOL_NAME}\`\n\n**Details:**\n\`\`\`\n${TOOL_INPUT_ESCAPED}\n\`\`\`\n\n⏱️ No response for ${NOTIFICATION_DELAY}s - Waiting for your approval!\n\n**Reply with:**\n\`1\` → Yes (approve)\n\`2\` → Yes, allow all this session\n\`3 <message>\` → No, with custom response"
 }
 EOF
 )

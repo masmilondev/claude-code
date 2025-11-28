@@ -1,0 +1,15 @@
+{
+  "name": "claude-code-discord-bot",
+  "version": "1.0.0",
+  "description": "Discord bot for remote Claude Code permission control",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "install-deps": "npm install"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1"
+  },
+  "author": "masmilon",
+  "license": "MIT"
+}
