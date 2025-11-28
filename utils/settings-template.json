@@ -1,0 +1,26 @@
+{
+  "permissions": {
+    "allow": [
+      "Edit",
+      "Write",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "Bash(cp:*)"
+    ],
+    "deny": [],
+    "ask": []
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash(rm:*)",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh \"$TOOL_INPUT\""
+          }
+        ]
+      }
+    ]
+  }
+}
