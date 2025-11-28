@@ -13,11 +13,11 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash(rm:*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh \"$TOOL_INPUT\""
+            "command": "~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh \"Bash\" \"$TOOL_INPUT\""
           }
         ]
       }

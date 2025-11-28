@@ -9,10 +9,10 @@
 
 set -e
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 CLAUDE_DIR="$HOME/.claude"
+MARKETPLACE_DIR="$CLAUDE_DIR/plugins/marketplaces/claude-code"
 SETTINGS_FILE="$CLAUDE_DIR/settings.local.json"
-TEMPLATE_FILE="$SCRIPT_DIR/settings-template.json"
+TEMPLATE_FILE="$MARKETPLACE_DIR/utils/settings-template.json"
 
 echo "=========================================="
 echo "SOP Workflow Plugin Setup"
@@ -87,7 +87,7 @@ else
 fi
 
 # Make hook script executable
-HOOK_SCRIPT="$HOME/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh"
+HOOK_SCRIPT="$MARKETPLACE_DIR/plugins/sop-workflow/hooks/notify-delete.sh"
 if [ -f "$HOOK_SCRIPT" ]; then
     chmod +x "$HOOK_SCRIPT"
     echo "Hook script made executable: $HOOK_SCRIPT"
@@ -105,5 +105,5 @@ echo "  - Auto-approve: Edit, Write, mkdir, mv, cp"
 echo "  - Discord notification on delete (rm) operations"
 echo ""
 echo "To customize Discord webhook:"
-echo "  Edit: ~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh"
+echo "  Edit: ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-delete.sh"
 echo ""

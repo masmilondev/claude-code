@@ -29,8 +29,9 @@ These operations will no longer ask for confirmation:
 - `Bash(cp:*)` - Copy files
 
 ### 2. Discord Notification Hook
-When `rm` (delete) is requested:
+When ANY Bash command needs permission:
 - Sends Discord notification immediately
+- Shows tool name, command details, and timestamp
 - Still asks for your confirmation in terminal
 - Keeps you informed even when away from computer
 
@@ -44,7 +45,7 @@ Read the file `~/.claude/settings.local.json` to check current configuration.
 
 ### Step 2: Read Template
 
-Read the template from `~/.claude/claude-code/utils/settings-template.json`
+Read the template from `~/.claude/plugins/marketplaces/claude-code/utils/settings-template.json`
 
 ### Step 3: Merge Settings
 
@@ -66,11 +67,11 @@ Update `~/.claude/settings.local.json` with:
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash(rm:*)",
+        "matcher": "Bash",
         "hooks": [
           {
             "type": "command",
-            "command": "~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh \"$TOOL_INPUT\""
+            "command": "~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh \"Bash\" \"$TOOL_INPUT\""
           }
         ]
       }
@@ -85,13 +86,13 @@ Update `~/.claude/settings.local.json` with:
 
 Run:
 ```bash
-chmod +x ~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh
+chmod +x ~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh
 ```
 
 ### Step 5: Verify Discord Webhook
 
 Check if the webhook URL is configured in:
-`~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh`
+`~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh`
 
 ---
 
@@ -113,7 +114,7 @@ Check if the webhook URL is configured in:
 ### Hooks Configured
 | Hook | Trigger | Action |
 |------|---------|--------|
-| notify-delete.sh | Bash(rm:*) | Discord notification |
+| notify-permission.sh | Bash (all) | Discord notification |
 
 ### Discord Webhook
 **Status**: {Configured | Not configured}
@@ -124,7 +125,7 @@ Check if the webhook URL is configured in:
 2. Test by running any `/sop-` command
 
 ### To Customize Discord Webhook
-Edit: `~/.claude/claude-code/plugins/sop-workflow/hooks/notify-delete.sh`
+Edit: `~/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-permission.sh`
 ```
 
 ---
@@ -142,7 +143,7 @@ Create a new `~/.claude/settings.local.json` with the full template.
 2. Run `/sop-setup` again
 
 ### If Discord notifications don't arrive
-1. Check webhook URL in `notify-delete.sh`
+1. Check webhook URL in `notify-permission.sh`
 2. Test webhook manually:
    ```bash
    curl -H "Content-Type: application/json" -d '{"content":"Test"}' YOUR_WEBHOOK_URL
