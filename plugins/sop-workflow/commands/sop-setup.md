@@ -153,6 +153,17 @@ Merge/update with these hooks (preserve existing permissions):
           }
         ]
       }
+    ],
+    "Notification": [
+      {
+        "matcher": "idle_prompt",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/USERNAME/.claude/plugins/marketplaces/claude-code/plugins/sop-workflow/hooks/notify-idle.sh"
+          }
+        ]
+      }
     ]
   }
 }
