@@ -223,65 +223,45 @@ ENHANCED PROMPT =
 
 ---
 
-## PHASE 5: OUTPUT FORMAT
+## PHASE 5: OUTPUT AND EXECUTE
 
-**CRITICAL**: Output ONLY the enhanced prompt. No headers, no meta-commentary, no explanations.
+**CRITICAL**: After enhancing the prompt, you MUST immediately execute it. Do not just output the prompt and stop.
 
-Your output must be a clean, executable prompt that Claude Code can directly act upon.
-
-**DO NOT OUTPUT**:
-- "Expert Enhancement Applied"
-- "Intent:", "Expertise:", "Standards:" labels
-- "Original:" showing the user's input back
-- "Enhanced Prompt" headers
-- "Executing with expert-level standards..."
-- Any explanation of what you did
-
-**DO OUTPUT**:
-Just the enhanced prompt text, starting immediately with the task. Format:
-
+### Step 1: Brief Summary (1-2 lines max)
+Show the user what you understood:
 ```
-As a {Expert Role}, {task description}:
-
-{Core requirements as clear action items}
-
-Requirements:
-- {Requirement 1}
-- {Requirement 2}
-
-Constraints:
-- {What to avoid 1}
-- {What to avoid 2}
+Enhanced: {one-line summary of the enhanced task}
 ```
 
-**Example transformation**:
+### Step 2: Execute Immediately
+Then immediately begin working on the task. Use tools, read files, write code, run commands - whatever is needed to complete the enhanced prompt.
+
+**DO NOT**:
+- Output the full enhanced prompt as text
+- Stop after showing the prompt
+- Ask "should I proceed?"
+- Wait for confirmation
+
+**DO**:
+- Show a brief 1-line summary of what you're about to do
+- Immediately start executing using appropriate tools
+- Complete the task end-to-end
+
+### Example Flow:
 
 User input: "add user search"
 
-Your ENTIRE output should be:
+Your response:
 ```
-As a Staff Engineer, implement a user search feature:
+Enhanced: Implement secure, paginated user search with SQL injection prevention and accessible UI.
 
-1. Create search endpoint with partial matching across name, email, username
-2. Use parameterized queries to prevent SQL injection
-3. Implement server-side pagination (default 20, max 100)
-4. Add debounced frontend input (300ms)
-5. Handle empty states and error states in UI
-
-Requirements:
-- Input sanitization before database query
-- Index on searchable columns
-- Loading and empty states in UI
-- Accessible (ARIA labels, keyboard navigation)
-
-Constraints:
-- No LIKE queries without proper escaping
-- No unbounded result sets
-- No N+1 queries
-- No blocking UI during search
+Let me start by examining the current codebase structure...
+[Uses Read/Glob/Grep tools]
+[Implements the feature]
+[Runs tests]
 ```
 
-That's it. No preamble. No explanation. Just the enhanced prompt ready for execution.
+The enhancement happens in your mind. The execution happens with your tools.
 
 ---
 
@@ -298,10 +278,10 @@ Before outputting, verify internally:
 
 ## REMEMBER
 
-1. Your output IS the enhanced prompt - nothing else
-2. Start immediately with "As a {Role}..."
-3. No meta-text, headers, or explanations
-4. Claude Code will execute whatever you output, so make it actionable
-5. Keep it concise but complete
-6. **USE CONVERSATION CONTEXT** - Reference actual files, errors, code from the ongoing discussion
-7. If mid-conversation, be specific (file names, line numbers, error messages) not generic
+1. **ENHANCE then EXECUTE** - Don't just output a prompt, actually do the work
+2. Show only a 1-line summary: "Enhanced: {summary}"
+3. Immediately use tools to complete the task
+4. **USE CONVERSATION CONTEXT** - Reference actual files, errors, code from the discussion
+5. If mid-conversation, be specific (file names, line numbers, error messages) not generic
+6. Never ask "should I proceed?" - just do it
+7. The user invoked /sop-prompt because they want the task DONE, not described
