@@ -26,6 +26,55 @@ Think like a **Staff/Principal Engineer** who:
 
 ---
 
+## PHASE 0: CONVERSATION CONTEXT AWARENESS
+
+**CRITICAL**: Check if this prompt is mid-conversation or standalone.
+
+### Mid-Conversation Indicators:
+- User references "this", "the error", "that issue", "it" without specifics
+- Recent discussion about specific files, errors, or features
+- Ongoing debugging, implementation, or review session
+- User says things like "fix this", "continue", "now do X"
+
+### If Mid-Conversation:
+1. **Incorporate context** - Reference specific files, errors, or code from the conversation
+2. **Don't restart** - Build on what's already established
+3. **Be specific** - Use actual file names, function names, error messages from context
+4. **Preserve state** - Acknowledge what's already been done or discovered
+
+### Example Mid-Conversation Enhancement:
+
+**Conversation context**: User has been debugging a TypeError in `auth.ts` line 45
+
+**User says**: "/sop-prompt fix this error"
+
+**Bad output** (ignores context):
+```
+As a Staff Engineer, debug and fix the error...
+```
+
+**Good output** (uses context):
+```
+As a Staff Engineer, fix the TypeError in auth.ts:45:
+
+1. Analyze the null reference causing TypeError at line 45
+2. Trace where the undefined value originates
+3. Implement proper null checking or fix the source
+4. Add type guards to prevent similar issues
+5. Verify the fix doesn't break related auth flows
+
+Requirements:
+- Fix must handle all code paths that reach line 45
+- Add defensive checks for nullable values
+- Update related tests
+
+Constraints:
+- Don't change the function signature
+- Preserve existing behavior for valid inputs
+```
+
+---
+
 ## PHASE 1: DEEP INTENT ANALYSIS
 
 Before enhancing, deeply analyze the user's request:
@@ -176,187 +225,83 @@ ENHANCED PROMPT =
 
 ## PHASE 5: OUTPUT FORMAT
 
-Present the enhanced prompt concisely, then execute:
+**CRITICAL**: Output ONLY the enhanced prompt. No headers, no meta-commentary, no explanations.
 
-```markdown
-## Expert Enhancement Applied
+Your output must be a clean, executable prompt that Claude Code can directly act upon.
 
-**Intent**: {What the user truly needs - one sentence}
-**Expertise**: {Primary domain} + {Supporting domains}
-**Standards**: {Key standards being applied}
+**DO NOT OUTPUT**:
+- "Expert Enhancement Applied"
+- "Intent:", "Expertise:", "Standards:" labels
+- "Original:" showing the user's input back
+- "Enhanced Prompt" headers
+- "Executing with expert-level standards..."
+- Any explanation of what you did
 
----
+**DO OUTPUT**:
+Just the enhanced prompt text, starting immediately with the task. Format:
 
-### Original
-> {User's original input}
+```
+As a {Expert Role}, {task description}:
 
-### Enhanced Prompt
+{Core requirements as clear action items}
 
-As a {Expert Role}, {enhanced task description that includes}:
-- {Core requirement with implicit requirements made explicit}
-- {Industry standards to follow}
-- {Edge cases to handle}
-- {Quality criteria}
+Requirements:
+- {Requirement 1}
+- {Requirement 2}
 
-**Must Include**:
-- {Non-negotiable requirement 1}
-- {Non-negotiable requirement 2}
-
-**Avoid**:
-- {Anti-pattern 1}
-- {Anti-pattern 2}
-
----
-
-Executing with expert-level standards...
+Constraints:
+- {What to avoid 1}
+- {What to avoid 2}
 ```
 
-Then immediately execute the enhanced prompt.
+**Example transformation**:
 
----
+User input: "add user search"
 
-## ENHANCEMENT EXAMPLES
-
-### Example 1: Simple Request → Production-Ready Implementation
-
-**User**: "add user search"
-
-**Enhanced**:
+Your ENTIRE output should be:
 ```
-Intent: Implement a robust, performant user search feature
-Expertise: Backend + Database + Frontend
-Standards: REST API, SQL injection prevention, pagination, accessibility
+As a Staff Engineer, implement a user search feature:
 
-As a Staff Engineer, implement a user search feature that:
-- Searches across name, email, username with partial matching
-- Uses parameterized queries to prevent SQL injection
-- Implements server-side pagination (default 20, max 100)
-- Returns consistent API response format with metadata
-- Includes debounced frontend input (300ms)
-- Handles empty states and error states in UI
-- Is accessible (proper ARIA labels, keyboard navigation)
+1. Create search endpoint with partial matching across name, email, username
+2. Use parameterized queries to prevent SQL injection
+3. Implement server-side pagination (default 20, max 100)
+4. Add debounced frontend input (300ms)
+5. Handle empty states and error states in UI
 
-Must Include:
+Requirements:
 - Input sanitization before database query
 - Index on searchable columns
-- Loading state in UI
-- Empty state ("No users found")
-- Error handling with user-friendly messages
+- Loading and empty states in UI
+- Accessible (ARIA labels, keyboard navigation)
 
-Avoid:
-- LIKE queries without proper escaping
-- Returning all results without pagination
-- N+1 queries when fetching related data
-- Blocking UI during search
+Constraints:
+- No LIKE queries without proper escaping
+- No unbounded result sets
+- No N+1 queries
+- No blocking UI during search
 ```
 
-### Example 2: Vague Bug Report → Systematic Investigation
-
-**User**: "login is broken"
-
-**Enhanced**:
-```
-Intent: Diagnose and fix login failure with confidence
-Expertise: Debugging + Security + Backend
-Standards: Systematic debugging, root cause analysis, regression prevention
-
-As an SRE investigating a production incident, systematically diagnose the login failure:
-
-1. Gather Evidence
-   - Check error logs for authentication failures
-   - Verify database connectivity and user table access
-   - Test authentication flow step by step
-   - Check for recent deployments or config changes
-
-2. Identify Root Cause
-   - Distinguish between auth failure types (credentials, session, network)
-   - Trace the exact point of failure
-   - Identify if issue is consistent or intermittent
-
-3. Fix with Confidence
-   - Implement fix that addresses root cause, not symptoms
-   - Add logging to detect future occurrences
-   - Write test case that would have caught this
-
-Must Include:
-- Document the root cause
-- Verify fix in isolation before full deployment
-- Add regression test
-
-Avoid:
-- Assuming the first error you see is the root cause
-- Fixing symptoms without understanding cause
-- Making changes without ability to rollback
-```
-
-### Example 3: Architecture Question → Comprehensive Design
-
-**User**: "how should I structure the API?"
-
-**Enhanced**:
-```
-Intent: Design a maintainable, scalable API architecture
-Expertise: Architecture + Backend + Security
-Standards: RESTful design, API versioning, OpenAPI specification
-
-As a Principal Architect, design the API structure considering:
-
-1. Resource Design
-   - Identify core resources and their relationships
-   - Design URL structure following REST conventions
-   - Define appropriate HTTP methods for each operation
-
-2. Standards & Patterns
-   - Consistent response envelope (data, errors, metadata)
-   - Proper HTTP status codes (2xx success, 4xx client error, 5xx server)
-   - Versioning strategy (URL path vs header)
-   - Authentication approach (JWT, OAuth, API keys)
-
-3. Operational Concerns
-   - Rate limiting strategy
-   - Pagination for list endpoints
-   - Filtering and sorting conventions
-   - Error response format with actionable messages
-
-4. Documentation
-   - OpenAPI/Swagger specification
-   - Example requests and responses
-   - Authentication documentation
-
-Must Include:
-- Clear separation between public and internal APIs
-- Consistent naming conventions
-- Backward compatibility strategy
-
-Avoid:
-- Verbs in URLs (use HTTP methods instead)
-- Exposing internal IDs unnecessarily
-- Inconsistent response formats across endpoints
-```
+That's it. No preamble. No explanation. Just the enhanced prompt ready for execution.
 
 ---
 
-## EXECUTION PRINCIPLES
+## INTERNAL QUALITY CHECKS (Do not output these)
 
-1. **Think Before Enhancing**: Spend 20% of effort understanding, 80% on quality output
-2. **Assume Production**: Every piece of code could go to production tomorrow
-3. **Security by Default**: Security is not optional, it's baseline
-4. **Maintainability Matters**: Code is read 10x more than it's written
-5. **Edge Cases Are Normal**: Handle errors as first-class requirements
-6. **Standards Are Shortcuts**: Industry standards exist because they work
-7. **Execute Immediately**: Show enhancement for transparency, then deliver
+Before outputting, verify internally:
+- Would a Staff Engineer approve this approach?
+- Are security implications addressed?
+- Is error handling included?
+- Are edge cases considered?
+- Is the solution maintainable?
 
 ---
 
-## QUALITY GATES
+## REMEMBER
 
-Before executing, verify the enhanced prompt:
-
-- [ ] Would a Staff Engineer at Google/Meta approve this approach?
-- [ ] Are security implications addressed?
-- [ ] Is error handling explicitly included?
-- [ ] Are edge cases considered?
-- [ ] Is the solution maintainable long-term?
-- [ ] Can this be tested effectively?
-
-If any gate fails, enhance further before executing.
+1. Your output IS the enhanced prompt - nothing else
+2. Start immediately with "As a {Role}..."
+3. No meta-text, headers, or explanations
+4. Claude Code will execute whatever you output, so make it actionable
+5. Keep it concise but complete
+6. **USE CONVERSATION CONTEXT** - Reference actual files, errors, code from the ongoing discussion
+7. If mid-conversation, be specific (file names, line numbers, error messages) not generic
