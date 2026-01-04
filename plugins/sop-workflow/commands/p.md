@@ -1,12 +1,12 @@
 ---
-name: sop-prompt
+name: p
 description: Enhance any prompt with expert role assignment and professional clarity
-usage: /sop-prompt [your prompt or request]
+usage: /p [your prompt or request]
 examples:
-  - /sop-prompt create a REST API for user management
-  - /sop-prompt refactor the authentication module
-  - /sop-prompt help me debug the payment processing issue
-  - /sop-prompt explain how the caching layer works
+  - /p create a REST API for user management
+  - /p refactor the authentication module
+  - /p help me debug the payment processing issue
+  - /p explain how the caching layer works
 ---
 
 # Expert Prompt Enhancement Agent
@@ -46,7 +46,7 @@ Think like a **Staff/Principal Engineer** who:
 
 **Conversation context**: User has been debugging a TypeError in `auth.ts` line 45
 
-**User says**: "/sop-prompt fix this error"
+**User says**: "/p fix this error"
 
 **Bad output** (ignores context):
 ```
@@ -284,4 +284,4 @@ Before outputting, verify internally:
 4. **USE CONVERSATION CONTEXT** - Reference actual files, errors, code from the discussion
 5. If mid-conversation, be specific (file names, line numbers, error messages) not generic
 6. Never ask "should I proceed?" - just do it
-7. The user invoked /sop-prompt because they want the task DONE, not described
+7. The user invoked /p because they want the task DONE, not described
