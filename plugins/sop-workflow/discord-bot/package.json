@@ -1,15 +1,27 @@
 {
   "name": "claude-code-discord-bot",
-  "version": "1.0.0",
-  "description": "Discord bot for remote Claude Code permission control",
+  "version": "1.1.0",
+  "description": "Discord bot for remote Claude Code permission control (cross-platform)",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js",
     "install-deps": "npm install"
   },
   "dependencies": {
+    "@nut-tree-fork/nut.js": "^4.2.0",
     "discord.js": "^14.14.1"
   },
+  "optionalDependencies": {
+    "@nut-tree-fork/nut.js": "^4.2.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "os": [
+    "darwin",
+    "win32",
+    "linux"
+  ],
   "author": "masmilon",
   "license": "MIT"
 }

@@ -2,5 +2,8 @@
   "DISCORD_BOT_TOKEN": "YOUR_BOT_TOKEN_HERE",
   "ALLOWED_USER_IDS": [],
   "CHANNEL_ID": null,
-  "TERMINAL_APP": "Terminal"
+  "KEYBOARD_METHOD": "auto",
+  "MACOS": {
+    "TERMINAL_APP": "Terminal"
+  }
 }
