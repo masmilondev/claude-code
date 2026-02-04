@@ -11,6 +11,9 @@ Thumbs.db
 config.local.*
 secrets.*
 
+# Ignore Discord bot config (contains tokens)
+plugins/sop-workflow/discord-bot/config.json
+
 # Ignore test files
 test-*
 scratch.*
